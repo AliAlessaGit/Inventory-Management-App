@@ -1,0 +1,39 @@
+[
+  {
+    "invoiceNumber": "FA0001",
+    "customerName": "علي العيسى",
+    "customerPhone": "0930502115",
+    "items": [
+      {
+        "idNumber": 1,
+        "name": "روشان فاتح",
+        "quantity": 3.0,
+        "unitPrice": 6.0,
+        "boxArea": 1.4,
+        "isTile": true,
+        "code": "00",
+        "grade": "3",
+        "date": "2025-11-17T19:31:00"
+      },
+      {
+        "idNumber": 2,
+        "name": "جوري 50",
+        "quantity": 1.0,
+        "unitPrice": 14.0,
+        "boxArea": 0.0,
+        "isTile": false,
+        "code": "",
+        "grade": "3",
+        "date": "2025-11-17T19:31:00"
+      }
+    ],
+    "date": "2025-11-17T19:31:24.7323947",
+    "payments": [
+      {
+        "amount": 30.0,
+        "date": "2025-11-17T19:36:00"
+      }
+    ],
+    "discount": 0.0
+  }
+]

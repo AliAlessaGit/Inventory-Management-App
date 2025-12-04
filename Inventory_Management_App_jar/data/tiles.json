@@ -1,0 +1,22 @@
+[
+  {
+    "code": "00",
+    "boxes": 47.0,
+    "boxArea": 1.4,
+    "materialType": "سيراميك",
+    "subType": "جدران",
+    "warehouseNumber": 1,
+    "grade": "3",
+    "warehouse": {
+      "id": 1,
+      "name": "خاص",
+      "type": "OWNED",
+      "ownerName": "",
+      "ownerContact": ""
+    },
+    "location": "رقم_1",
+    "idNumber": 1,
+    "name": "روشان فاتح",
+    "price": 6.0
+  }
+]

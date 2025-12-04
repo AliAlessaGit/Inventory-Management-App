@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Inventory Management App:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Inventory_Management_App_jar</output-path>
+    <root id="archive" name="Inventory Management App.jar">
+      <element id="module-output" name="imm" />
+      <element id="module-output" name="Inventory Management App" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../Libs/gson-2.10.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../Libs/flatlaf-3.6.1.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

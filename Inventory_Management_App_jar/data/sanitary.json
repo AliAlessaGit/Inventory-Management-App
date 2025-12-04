@@ -1,0 +1,17 @@
+[
+  {
+    "quantity": 39,
+    "type": "LOCAL_WASHBASIN",
+    "warehouse": {
+      "id": 1,
+      "name": "خاص",
+      "type": "OWNED",
+      "ownerName": "",
+      "ownerContact": ""
+    },
+    "grade": "3",
+    "idNumber": 2,
+    "name": "جوري 50",
+    "price": 14.0
+  }
+]
