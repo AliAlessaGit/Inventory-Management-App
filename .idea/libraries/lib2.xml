@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="lib2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Inventory Management App/out/production/Inventory Management App/lib/gson-2.10.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Inventory Management App/out/production/Inventory Management App/lib/flatlaf-3.6.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

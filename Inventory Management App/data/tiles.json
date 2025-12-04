@@ -1,0 +1,42 @@
+[
+  {
+    "code": "00",
+    "boxes": 7.85,
+    "boxArea": 1.58,
+    "materialType": "سيراميك",
+    "subType": "جدران",
+    "warehouseNumber": 1,
+    "grade": "1",
+    "warehouse": {
+      "id": 1,
+      "name": "ابو عمر",
+      "type": "OWNED",
+      "ownerName": "",
+      "ownerContact": ""
+    },
+    "location": "رقم_1",
+    "idNumber": 4,
+    "name": "راميتا",
+    "price": 7.0
+  },
+  {
+    "code": "00",
+    "boxes": 21.1,
+    "boxArea": 32.0,
+    "materialType": "سيراميك",
+    "subType": "ارضيات",
+    "warehouseNumber": 1,
+    "grade": "32",
+    "warehouse": {
+      "id": 1,
+      "name": "ابو عمر",
+      "type": "OWNED",
+      "ownerName": "",
+      "ownerContact": ""
+    },
+    "location": "رقم_1",
+    "idNumber": 7,
+    "name": "يشسلي",
+    "price": 3.0
+  }
+]

@@ -1,0 +1,105 @@
+[
+  {
+    "invoiceNumber": "FA0001",
+    "customerName": "علي",
+    "customerPhone": "3434",
+    "items": [
+      {
+        "idNumber": 4,
+        "name": "راميتا2",
+        "quantity": 5.0,
+        "unitPrice": 5.0,
+        "boxArea": 1.5,
+        "isTile": true,
+        "code": "002",
+        "grade": "3",
+        "date": "2025-09-27T15:20:00"
+      },
+      {
+        "idNumber": 2,
+        "name": "جوري",
+        "quantity": 4.0,
+        "unitPrice": 7.0,
+        "boxArea": 0.0,
+        "isTile": false,
+        "code": "",
+        "grade": "3",
+        "date": "2025-09-27T15:20:00"
+      },
+      {
+        "idNumber": 4,
+        "name": "راميتا2",
+        "quantity": 1.0,
+        "unitPrice": -5.0,
+        "boxArea": 1.5,
+        "isTile": true,
+        "code": "002",
+        "grade": "3",
+        "date": "2025-09-27T15:21:00"
+      },
+      {
+        "idNumber": 4,
+        "name": "راميتا2",
+        "quantity": 1.0,
+        "unitPrice": -5.0,
+        "boxArea": 1.5,
+        "isTile": true,
+        "code": "002",
+        "grade": "3",
+        "date": "2025-09-27T15:27:00"
+      },
+      {
+        "idNumber": 4,
+        "name": "راميتا2",
+        "quantity": 1.0,
+        "unitPrice": -5.0,
+        "boxArea": 1.5,
+        "isTile": true,
+        "code": "002",
+        "grade": "3",
+        "date": "2025-09-27T15:27:00"
+      }
+    ],
+    "date": "2025-09-27T13:42:39.800707",
+    "payments": [
+      {
+        "amount": 10.0,
+        "date": "2025-09-28T13:43:00"
+      },
+      {
+        "amount": 5.0,
+        "date": "2025-09-28T13:43:00"
+      },
+      {
+        "amount": 5.5,
+        "date": "2025-09-28T13:43:00"
+      },
+      {
+        "amount": 3.0,
+        "date": "2025-09-28T13:55:00"
+      }
+    ],
+    "discount": 10.0
+  },
+  {
+    "invoiceNumber": "FA0002",
+    "customerName": "فادي",
+    "customerPhone": "4352",
+    "items": [
+      {
+        "idNumber": 4,
+        "name": "راميتا",
+        "quantity": 2.0,
+        "unitPrice": 7.0,
+        "boxArea": 1.58,
+        "isTile": true,
+        "code": "00",
+        "grade": "1",
+        "date": "2025-09-28T13:51:00"
+      }
+    ],
+    "date": "2025-09-28T13:51:52.5562924",
+    "payments": [],
+    "discount": 0.12
+  }
+]

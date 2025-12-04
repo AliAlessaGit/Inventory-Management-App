@@ -1,0 +1,17 @@
+[
+  {
+    "quantity": 48,
+    "type": "LOCAL_WASHBASIN",
+    "warehouse": {
+      "id": 1,
+      "name": "ابو عمر",
+      "type": "OWNED",
+      "ownerName": "",
+      "ownerContact": ""
+    },
+    "grade": "1",
+    "idNumber": 2,
+    "name": "جوري5",
+    "price": 8.0
+  }
+]
