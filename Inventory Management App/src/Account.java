@@ -1,30 +1,49 @@
-// Account.java
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Account implements Serializable {
-    private static final long serialVersionUID = 1L;
 
     private String name;
-    private final List<AccountEntry> entries = new ArrayList<>();
 
-    public Account(String name) { this.name = name; }
+    // ⚠ لا final
+    private List<AccountInvoice> AccountInvoices;
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-
-    public List<AccountEntry> getEntries() { return entries; }
-
-    public void addEntry(AccountEntry entry) { entries.add(entry); }
-
-    public double getTotalDebit() {
-        return entries.stream().mapToDouble(AccountEntry::getDebit).sum();
+    public Account(String name) {
+        this.name = name;
+        this.AccountInvoices = new ArrayList<>();
     }
-    public double getTotalCredit() {
-        return entries.stream().mapToDouble(AccountEntry::getCredit).sum();
+
+    /* ===== بيانات الحساب ===== */
+
+    public String getName() {
+        return name;
     }
-    public double getBalance() { return getTotalCredit() - getTotalDebit(); } // الدائن - المدين
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /* ===== حماية من null (مهم جدًا مع Gson) ===== */
+
+    public List<AccountInvoice> getAccountInvoices() {
+        if (AccountInvoices == null) {
+            AccountInvoices = new ArrayList<>();
+        }
+        return AccountInvoices;
+    }
+
+    public void addAccountInvoice(AccountInvoice accountInvoice) {
+        getAccountInvoices().add(accountInvoice);
+    }
+
+    /* ===== الرصيد ===== */
+
+    public double getBalance() {
+        return getAccountInvoices().stream()
+                .mapToDouble(AccountInvoice::getTotal)
+                .sum();
+    }
 
     public String getSide() {
         double bal = getBalance();

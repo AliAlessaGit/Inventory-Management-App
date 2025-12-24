@@ -2,49 +2,66 @@ import javax.swing.table.AbstractTableModel;
 import java.util.List;
 
 public class EntriesTableModel extends AbstractTableModel {
+
     private final String[] cols = {
-            "التاريخ","مدين","دائن","البيان","الرصيد",
-            "العدد","الوحدة","الافرادي","الإجمالي"
+            "مدين", "دائن", "البيان", "الرصيد",
+            "العدد", "الوحدة", "الإفرادي", "الإجمالي"
     };
+
     private List<AccountEntry> entries;
 
-    public EntriesTableModel(List<AccountEntry> e){ this.entries=e; }
-
-    public void setEntries(List<AccountEntry> e){
-        this.entries=e; fireTableDataChanged();
+    public EntriesTableModel(List<AccountEntry> entries) {
+        this.entries = entries;
     }
 
-    @Override public int getRowCount(){ return entries==null?0:entries.size(); }
-    @Override public int getColumnCount(){ return cols.length; }
-    @Override public String getColumnName(int c){ return cols[c]; }
+    public void setEntries(List<AccountEntry> entries) {
+        this.entries = entries;
+        fireTableDataChanged();
+    }
 
-    @Override public Class<?> getColumnClass(int col){
-        return switch (col){
-            case 1,2,4,5,7,8 -> Double.class;
+    @Override
+    public int getRowCount() {
+        return entries == null ? 0 : entries.size();
+    }
+
+    @Override
+    public int getColumnCount() {
+        return cols.length;
+    }
+
+    @Override
+    public String getColumnName(int c) {
+        return cols[c];
+    }
+
+    @Override
+    public Class<?> getColumnClass(int col) {
+        return switch (col) {
+            case 0, 1, 3, 4, 6, 7 -> Double.class;
             default -> String.class;
         };
     }
 
-    @Override public Object getValueAt(int r,int c){
+    @Override
+    public Object getValueAt(int r, int c) {
         AccountEntry e = entries.get(r);
-        return switch (c){
-            case 0 -> e.getDate();
-            case 1 -> e.getDebit();
-            case 2 -> e.getCredit();
-            case 3 -> e.getDescription();
-            case 4 -> runningBalance(r);        // الرصيد التراكمي
-            case 5 -> e.getQty();
-            case 6 -> e.getUnit();
-            case 7 -> e.getUnitPrice();
-            case 8 -> e.getTotal();
+        return switch (c) {
+            case 0 -> e.getDebit();
+            case 1 -> e.getCredit();
+            case 2 -> e.getDescription();
+            case 3 -> runningBalance(r);
+            case 4 -> e.getQty();
+            case 5 -> e.getUnit();
+            case 6 -> e.getUnitPrice();
+            case 7 -> e.getTotal();
             default -> "";
         };
     }
 
-    /* حساب الرصيد حتى الصفّ r */
-    private double runningBalance(int r){
+    /* الرصيد التراكمي داخل الفاتورة */
+    private double runningBalance(int r) {
         double bal = 0;
-        for(int i=0;i<=r;i++){
+        for (int i = 0; i <= r; i++) {
             bal += entries.get(i).getCredit() - entries.get(i).getDebit();
         }
         return bal;
