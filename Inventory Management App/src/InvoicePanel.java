@@ -200,10 +200,67 @@ public class InvoicePanel extends JPanel {
         dlg.getRootPane().registerKeyboardAction(e -> dlg.dispose(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
 
         JPanel topPanel = new JPanel(new BorderLayout());
-        JPanel hdr = new JPanel(new GridLayout(2, 1));
-        hdr.add(new JLabel("  اسم العميل: " + inv.getCustomerName()));
-        hdr.add(new JLabel("  الهاتف: " + inv.getCustomerPhone()));
+        JLabel lblName = new JLabel("  اسم العميل: " + inv.getCustomerName());
+        JLabel lblPhone = new JLabel("  الهاتف: " + inv.getCustomerPhone());
+
+        JButton editCustomerBtn = new JButton("تعديل بيانات العميل");
+
+        JPanel hdr = new JPanel();
+        hdr.setLayout(new BoxLayout(hdr, BoxLayout.Y_AXIS));
+
+        lblName.setAlignmentX(Component.LEFT_ALIGNMENT);
+        lblPhone.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        btnPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        btnPanel.add(editCustomerBtn);
+
+        hdr.add(lblName);
+        hdr.add(Box.createVerticalStrut(3));
+        hdr.add(lblPhone);
+        hdr.add(Box.createVerticalStrut(6));
+        hdr.add(btnPanel);
+
         topPanel.add(hdr, BorderLayout.CENTER);
+
+        editCustomerBtn.addActionListener(e -> {
+            JTextField nameField = new JTextField(inv.getCustomerName(), 20);
+            JTextField phoneField = new JTextField(inv.getCustomerPhone(), 20);
+
+            JPanel panel = new JPanel(new GridLayout(2, 2, 5, 5));
+            panel.add(new JLabel("اسم العميل:"));
+            panel.add(nameField);
+            panel.add(new JLabel("رقم الهاتف:"));
+            panel.add(phoneField);
+
+            int result = JOptionPane.showConfirmDialog(
+                    dlg,
+                    panel,
+                    "تعديل بيانات العميل",
+                    JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.PLAIN_MESSAGE
+            );
+
+            if (result == JOptionPane.OK_OPTION) {
+                String newName = nameField.getText().trim();
+                String newPhone = phoneField.getText().trim();
+
+                if (newName.isEmpty()) {
+                    JOptionPane.showMessageDialog(dlg, "اسم العميل لا يمكن أن يكون فارغًا", "خطأ", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                inv.setCustomerName(newName);
+                inv.setCustomerPhone(newPhone);
+
+                // تحديث العناوين
+                lblName.setText("  اسم العميل: " + newName);
+                lblPhone.setText("  الهاتف: " + newPhone);
+
+                invoiceService.saveToFile(); // حفظ التعديل
+                refreshTable(null);          // تحديث الجدول الرئيسي
+            }
+        });
 
         JCheckBox showDetailsCheck = new JCheckBox("إظهار تفاصيل المرتجعات", true);
         topPanel.add(showDetailsCheck, BorderLayout.SOUTH);
