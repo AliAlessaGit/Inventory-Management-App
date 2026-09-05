@@ -88,14 +88,55 @@
         public int getItemCount() { return items.size(); }
 
         // إدارة الدفعات
-        public void addPayment(double amount, LocalDateTime date) {
-            payments.add(new Payment(amount, date));
+        public void addPayment(
+                double amount,
+                LocalDateTime date) {
+
+            addPayment(
+                    amount,
+                    date,
+                    "USD",
+                    1.0
+            );
+        }
+        public void addPayment(
+                double amount,
+                LocalDateTime date,
+                String currency,
+                double exchangeRate) {
+
+            payments.add(
+                    new Payment(
+                            amount,
+                            date,
+                            currency,
+                            exchangeRate
+                    )
+            );
         }
         public List<Payment> getPayments() { return payments; }
         public double getPaymentsTotal() {
+
             double sum = 0.0;
-            for (Payment p : payments) sum += p.getAmount();
+
+            for (Payment p : payments) {
+
+                sum += p.getDollarAmount();
+            }
+
             return sum;
+        }
+        public double getPaymentsTotalInSyrian(double currentRate) {
+
+            if (!Double.isFinite(currentRate)
+                    || currentRate <= 0) {
+
+                throw new IllegalArgumentException(
+                        "سعر الدولار غير صالح."
+                );
+            }
+
+            return getPaymentsTotal() * currentRate;
         }
 
         // تهيئة العداد من الفواتير المحفوظة

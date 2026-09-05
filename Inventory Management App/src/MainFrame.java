@@ -13,6 +13,7 @@ public class MainFrame extends JFrame {
     private InvoiceService invoiceService;
     private WarehouseManager warehouseManager;
     private AccountsManager accountsManager;
+    private CurrencySettingsService currencySettingsService;
 
     public MainFrame() {
         super("إدارة معارض السيراميك _ مطور من قبل المهندس علي العيسى");
@@ -39,6 +40,8 @@ public class MainFrame extends JFrame {
         tileService = new TileService("data/tiles.json", warehouses);
         sanitaryService = new SanitaryService("data/sanitary.json", warehouses);
         invoiceService = new InvoiceService("data/invoices.json");
+        currencySettingsService =
+                new CurrencySettingsService("data/settings.json");
 
         // 3) تهيئة مدير الحسابات (التحميل أصبح تلقائيًا داخل المُنشئ)
         accountsManager = new AccountsManager("data/accounts.json");
@@ -50,14 +53,72 @@ public class MainFrame extends JFrame {
         tabbedPane.setFont(new Font("Tahoma", Font.BOLD, 18));
         tabbedPane.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 
-        // تم تمرير warehouseManager إلى TilePanel لاستخدامه عند الحاجة
-        tabbedPane.addTab("البلاط", new TilePanel(tileService, warehouseManager));
-        tabbedPane.addTab("الأدوات الصحية", new SanitaryPanel(sanitaryService));
-        tabbedPane.addTab("إضافة عنصر", new AddItemPanel(tileService, sanitaryService, warehouses));
-        tabbedPane.addTab("فاتورة جديدة", new NewInvoicePanel(tileService, sanitaryService, invoiceService));
-        tabbedPane.addTab("الفواتير", new InvoicePanel(invoiceService, tileService, sanitaryService));
-        tabbedPane.addTab("المستودعات", new WarehousePanel(warehouseManager)); // هنا لا يوجد تغيير
-        tabbedPane.addTab("الحسابات", new AccountsPanel(accountsManager));
+        tabbedPane.addTab(
+                "البلاط",
+                new TilePanel(
+                        tileService,
+                        warehouseManager,
+                        currencySettingsService
+                )
+        );
+
+        tabbedPane.addTab(
+                "الأدوات الصحية",
+                new SanitaryPanel(
+                        sanitaryService,
+                        currencySettingsService
+                )
+        );
+
+        tabbedPane.addTab(
+                "إضافة عنصر",
+                new AddItemPanel(
+                        tileService,
+                        sanitaryService,
+                        warehouses
+                )
+        );
+
+        tabbedPane.addTab(
+                "فاتورة جديدة",
+                new NewInvoicePanel(
+                        tileService,
+                        sanitaryService,
+                        invoiceService,
+                        warehouseManager
+                )
+        );
+        tabbedPane.addTab(
+                "الفواتير",
+                new InvoicePanel(
+                        invoiceService,
+                        tileService,
+                        sanitaryService,
+                        warehouseManager,
+                        currencySettingsService
+                )
+        );
+
+        tabbedPane.addTab(
+                "المستودعات",
+                new WarehousePanel(
+                        warehouseManager
+                )
+        );
+
+        tabbedPane.addTab(
+                "الحسابات",
+                new AccountsPanel(
+                        accountsManager
+                )
+        );
+
+        tabbedPane.addTab(
+                "العملة",
+                new CurrencySettingsPanel(
+                        currencySettingsService
+                )
+        );
 
         add(tabbedPane, BorderLayout.CENTER);
 

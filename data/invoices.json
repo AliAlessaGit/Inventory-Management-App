@@ -1,7 +1,7 @@
 [
   {
     "invoiceNumber": "FA0001",
-    "customerName": "علي العيس",
+    "customerName": "علي العيسى",
     "customerPhone": "0930502114",
     "items": [
       {
@@ -13,7 +13,8 @@
         "isTile": true,
         "code": "00",
         "grade": "3",
-        "date": "2025-11-17T19:31:00"
+        "date": "2025-11-17T19:31:00",
+        "externalItem": false
       },
       {
         "idNumber": 2,
@@ -24,14 +25,295 @@
         "isTile": false,
         "code": "",
         "grade": "3",
-        "date": "2025-11-17T19:31:00"
+        "date": "2025-11-17T19:31:00",
+        "externalItem": false
+      },
+      {
+        "idNumber": 0,
+        "name": "slkdjgf",
+        "quantity": 5.0,
+        "unitPrice": 5.0,
+        "boxArea": 0.0,
+        "isTile": false,
+        "code": "",
+        "grade": "",
+        "date": "2026-08-27T15:33:00",
+        "externalItem": true
+      },
+      {
+        "idNumber": 0,
+        "name": "ابو شخة",
+        "quantity": 1.0,
+        "unitPrice": 55.0,
+        "boxArea": 0.0,
+        "isTile": false,
+        "code": "",
+        "grade": "",
+        "date": "2026-08-27T15:35:00",
+        "externalItem": true
+      },
+      {
+        "idNumber": 0,
+        "name": "شخة سيارة",
+        "quantity": 4.0,
+        "unitPrice": 5.0,
+        "boxArea": 0.0,
+        "isTile": false,
+        "code": "",
+        "grade": "",
+        "date": "2026-09-03T15:45:00",
+        "externalItem": true
+      },
+      {
+        "idNumber": 0,
+        "name": "ولاشي",
+        "quantity": 100.0,
+        "unitPrice": 0.0,
+        "boxArea": 0.0,
+        "isTile": false,
+        "code": "",
+        "grade": "",
+        "date": "2026-09-03T16:27:00",
+        "externalItem": true
+      },
+      {
+        "idNumber": 2,
+        "name": "جوري 50",
+        "quantity": 5.0,
+        "unitPrice": 14.0,
+        "boxArea": 0.0,
+        "isTile": false,
+        "code": "",
+        "grade": "3",
+        "date": "2026-09-03T17:23:00",
+        "externalItem": false
       }
     ],
     "date": "2025-11-17T19:31:24.7323947",
     "payments": [
       {
         "amount": 30.0,
-        "date": "2025-11-17T19:36:00"
+        "date": "2025-11-17T19:36:00",
+        "exchangeRate": 0.0,
+        "dollarAmount": 0.0
+      },
+      {
+        "amount": 100.0,
+        "date": "2026-09-03T16:44:00.0916264",
+        "currency": "USD",
+        "exchangeRate": 1.0,
+        "dollarAmount": 100.0
+      }
+    ],
+    "discount": 2.2
+  },
+  {
+    "invoiceNumber": "FA0002",
+    "customerName": "محمد السامية",
+    "customerPhone": "66",
+    "items": [
+      {
+        "idNumber": 1,
+        "name": "روشان فاتح",
+        "quantity": 6.0,
+        "unitPrice": 6.0,
+        "boxArea": 1.4,
+        "isTile": true,
+        "code": "00",
+        "grade": "3",
+        "date": "2026-08-27T18:00:00",
+        "externalItem": false
+      },
+      {
+        "idNumber": 2,
+        "name": "جوري 50",
+        "quantity": 4.0,
+        "unitPrice": 20.0,
+        "boxArea": 0.0,
+        "isTile": false,
+        "code": "",
+        "grade": "3",
+        "date": "2026-08-27T18:00:00",
+        "externalItem": false
+      },
+      {
+        "idNumber": 0,
+        "name": "اجرة سيارة",
+        "quantity": 1.0,
+        "unitPrice": 10.0,
+        "boxArea": 0.0,
+        "isTile": false,
+        "code": "",
+        "grade": "",
+        "date": "2026-08-29T12:00:00",
+        "externalItem": true
+      },
+      {
+        "idNumber": 1,
+        "name": "روشان فاتح",
+        "quantity": 1.0,
+        "unitPrice": -6.0,
+        "boxArea": 1.4,
+        "isTile": true,
+        "code": "00",
+        "grade": "3",
+        "date": "2026-08-29T14:26:00",
+        "externalItem": false
+      },
+      {
+        "idNumber": 0,
+        "name": "اجور العمال",
+        "quantity": 1.0,
+        "unitPrice": 30.0,
+        "boxArea": 0.0,
+        "isTile": false,
+        "code": "",
+        "grade": "",
+        "date": "2026-08-29T14:30:00",
+        "externalItem": true
+      },
+      {
+        "idNumber": 0,
+        "name": "كليبسات",
+        "quantity": 2.0,
+        "unitPrice": 2.5,
+        "boxArea": 0.0,
+        "isTile": false,
+        "code": "",
+        "grade": "",
+        "date": "2026-09-03T16:14:00",
+        "externalItem": true
+      }
+    ],
+    "date": "2026-08-27T18:00:33.585218",
+    "payments": [
+      {
+        "amount": 66.0,
+        "date": "2026-08-29T12:01:26.9637867",
+        "exchangeRate": 0.0,
+        "dollarAmount": 0.0
+      },
+      {
+        "amount": 90.0,
+        "date": "2026-08-29T14:34:41.5404513",
+        "exchangeRate": 0.0,
+        "dollarAmount": 0.0
+      }
+    ],
+    "discount": 6.0
+  },
+  {
+    "invoiceNumber": "FA0003",
+    "customerName": "احمد العلي",
+    "customerPhone": "436436246",
+    "items": [
+      {
+        "idNumber": 1,
+        "name": "روشان فاتح",
+        "quantity": 4.5,
+        "unitPrice": 8.0,
+        "boxArea": 1.4,
+        "isTile": true,
+        "code": "00",
+        "grade": "3",
+        "date": "2026-08-30T22:45:00",
+        "externalItem": false
+      }
+    ],
+    "date": "2026-08-30T22:45:54.3285513",
+    "payments": [
+      {
+        "amount": 330000.0,
+        "date": "2026-09-01T13:02:09.4675579",
+        "currency": "SYP",
+        "exchangeRate": 13200.0,
+        "dollarAmount": 25.0
+      },
+      {
+        "amount": 200000.0,
+        "date": "2026-09-01T13:05:11.1450769",
+        "currency": "SYP",
+        "exchangeRate": 12200.0,
+        "dollarAmount": 16.39344262295082
+      },
+      {
+        "amount": 7.0,
+        "date": "2026-09-01T13:06:02.9403157",
+        "currency": "USD",
+        "exchangeRate": 1.0,
+        "dollarAmount": 7.0
+      }
+    ],
+    "discount": 2.01
+  },
+  {
+    "invoiceNumber": "FA0004",
+    "customerName": "ابراهيم الدعاس",
+    "customerPhone": "84",
+    "items": [
+      {
+        "idNumber": 3,
+        "name": "سعودي مرخم",
+        "quantity": 1.0,
+        "unitPrice": 8.0,
+        "boxArea": 1.8,
+        "isTile": true,
+        "code": "3524",
+        "grade": "1",
+        "date": "2026-09-03T10:09:00",
+        "externalItem": false
+      }
+    ],
+    "date": "2026-09-03T10:09:21.5108715",
+    "payments": [
+      {
+        "amount": 5.0,
+        "date": "2026-09-03T10:09:21.5108715",
+        "currency": "USD",
+        "exchangeRate": 1.0,
+        "dollarAmount": 5.0
+      }
+    ],
+    "discount": 0.0
+  },
+  {
+    "invoiceNumber": "FA0005",
+    "customerName": "فادي العيسى",
+    "customerPhone": "4352",
+    "items": [
+      {
+        "idNumber": 2,
+        "name": "جوري 50",
+        "quantity": 2.0,
+        "unitPrice": 14.0,
+        "boxArea": 0.0,
+        "isTile": false,
+        "code": "",
+        "grade": "3",
+        "date": "2026-09-03T18:14:00",
+        "externalItem": false
+      },
+      {
+        "idNumber": 1,
+        "name": "روشان فاتح",
+        "quantity": 2.0,
+        "unitPrice": -7.0,
+        "boxArea": 1.4,
+        "isTile": true,
+        "code": "00",
+        "grade": "3",
+        "date": "2026-09-03T18:25:00",
+        "externalItem": false
+      }
+    ],
+    "date": "2026-09-03T18:14:28.2087744",
+    "payments": [
+      {
+        "amount": 30.0,
+        "date": "2026-09-03T18:26:19.5862043",
+        "currency": "USD",
+        "exchangeRate": 1.0,
+        "dollarAmount": 30.0
       }
     ],
     "discount": 0.0

@@ -17,6 +17,7 @@ public class NewInvoicePanel extends JPanel {
     private final TileService tileService;
     private final SanitaryService sanitaryService;
     private final InvoiceService invoiceService;
+    private  WarehouseManager warehouseManager;
 
     private Invoice currentInvoice;
 
@@ -40,14 +41,50 @@ public class NewInvoicePanel extends JPanel {
     private JLabel totalLabel, paidLabel, remainingLabel;
 
     private List<Object> displayedInventoryItems;
-    private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
+
+    private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
+
+    // =========================================
+// فلترة مخزون البلاط
+// =========================================
+
+    private final TileFilter currentFilter = new TileFilter();
+    private final TileFilterService tileFilterService = new TileFilterService();
+
+    private JButton filterButton;
+    private JPopupMenu filterPopup;
+    private TileFilterPanel tileFilterPanel;
+
+    private String currentSearchText = "";
+
+    private List<Warehouse> getWarehousesForFilter() {
+
+        return warehouseManager.getWarehouses();
+    }
     public NewInvoicePanel(TileService tileService,
                            SanitaryService sanitaryService,
                            InvoiceService invoiceService) {
         this.tileService = tileService;
         this.sanitaryService = sanitaryService;
         this.invoiceService = invoiceService;
+        this.currentInvoice = invoiceService.createNewInvoice();
+
+        setLayout(new BorderLayout(5, 5));
+        initUI();
+    }
+
+    public NewInvoicePanel(
+            TileService tileService,
+            SanitaryService sanitaryService,
+            InvoiceService invoiceService,
+            WarehouseManager warehouseManager) {
+
+        this.tileService = tileService;
+        this.sanitaryService = sanitaryService;
+        this.invoiceService = invoiceService;
+        this.warehouseManager = warehouseManager;
+
         this.currentInvoice = invoiceService.createNewInvoice();
 
         setLayout(new BorderLayout(5, 5));
@@ -124,15 +161,32 @@ public class NewInvoicePanel extends JPanel {
         typeRow.add(tileRadio);
         typeRow.add(sanitaryRadio);
         filters.add(typeRow);
-
-        JPanel searchRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
+        JPanel searchRow =
+                new JPanel(
+                        new FlowLayout(
+                                FlowLayout.LEFT,
+                                8,
+                                0
+                        )
+                );
 
         searchField = new JTextField(15);
+
         searchBtn = new JButton("بحث");
+
+        filterButton = new JButton("فلترة ▼");
+
+// زر الفلترة
+        filterButton.addActionListener(
+                e -> toggleFilterPopup()
+        );
+
         searchRow.add(searchBtn);
         searchRow.add(searchField);
+        searchRow.add(filterButton);
 
         filters.add(searchRow);
+
 
         right.add(filters, BorderLayout.NORTH);
 
@@ -180,11 +234,16 @@ public class NewInvoicePanel extends JPanel {
         add(bottomPanel, BorderLayout.SOUTH);
 
         SwingUtilities.invokeLater(() -> split.setDividerLocation(0.5));
-
         tileRadio.addActionListener(e -> reloadInventory());
         sanitaryRadio.addActionListener(e -> reloadInventory());
-        searchField.addActionListener(e -> reloadInventory());
+
         searchBtn.addActionListener(e -> reloadInventory());
+        searchField.addActionListener(e -> reloadInventory());
+
+        searchField.getDocument().addDocumentListener(
+                new SimpleDocumentListener(this::reloadInventory)
+        );
+
         paymentAmountField.addActionListener(e -> addPaymentFromUI());
 
         reloadInventory();
@@ -209,41 +268,252 @@ public class NewInvoicePanel extends JPanel {
         return reserved;
     }
 
-    private void reloadInventory() {
-        inventoryModel.setRowCount(0);
-        // <<<<<<< جديد: تهيئة القائمة في كل مرة يتم فيها تحديث الجدول
-        this.displayedInventoryItems = new ArrayList<>();
+    private void updateFilterButtonText() {
 
-        String searchText = searchField.getText().trim().toLowerCase();
-        Map<Long, Double> reservedById = getReservedQuantitiesById();
+        if (filterButton == null) {
+            return;
+        }
+
+        int count = 0;
+
+        if (!currentFilter.getMaterials().isEmpty()) {
+            count++;
+        }
+
+        if (!currentFilter.getSubTypes().isEmpty()) {
+            count++;
+        }
+
+        if (!currentFilter.getWarehouses().isEmpty()) {
+            count++;
+        }
+
+        if (!currentFilter.getLocations().isEmpty()) {
+            count++;
+        }
+
+        if (!currentFilter.getGrades().isEmpty()) {
+            count++;
+        }
+
+        if (!currentFilter.getBoxAreas().isEmpty()) {
+            count++;
+        }
+
+
+        if (count == 0) {
+
+            filterButton.setText(
+                    "فلترة ▼"
+            );
+
+        } else {
+
+            filterButton.setText(
+                    "فلترة (" + count + ") ▼"
+            );
+        }
+    }
+    private void reloadInventory() {
+
+        inventoryModel.setRowCount(0);
+
+        displayedInventoryItems =
+                new ArrayList<>();
+
+        currentSearchText =
+                searchField.getText() == null
+                        ? ""
+                        : searchField.getText().trim();
+
+        Map<Long, Double> reservedById =
+                getReservedQuantitiesById();
+
+
+        // =========================================
+        // البلاط
+        // =========================================
 
         if (tileRadio.isSelected()) {
-            List<TileItem> items = searchText.isEmpty() ? tileService.getAll() : tileService.searchByNameOrCode(searchText);
+
+            List<TileItem> items =
+                    tileFilterService.filterAndSearch(
+                            tileService.getAll(),
+                            currentFilter,
+                            currentSearchText
+                    );
+
             for (TileItem it : items) {
-                double reserved = reservedById.getOrDefault(it.getIdNumber(), 0.0);
-                double available = it.getBoxes() - reserved;
-                inventoryModel.addRow(new Object[]{
-                        it.getCode(), it.getName(), it.getGrade(),
-                        String.format("%.2f", available), it.getBoxArea(), it.getPrice()
-                });
-                // <<<<<<< جديد: إضافة الكائن نفسه إلى القائمة الموازية
+
+                double reserved =
+                        reservedById.getOrDefault(
+                                it.getIdNumber(),
+                                0.0
+                        );
+
+                double available =
+                        it.getBoxes() - reserved;
+
+                inventoryModel.addRow(
+                        new Object[]{
+                                it.getCode(),
+                                it.getName(),
+                                it.getGrade(),
+                                String.format(
+                                        "%.2f",
+                                        available
+                                ),
+                                it.getBoxArea(),
+                                it.getPrice()
+                        }
+                );
+
                 displayedInventoryItems.add(it);
             }
-        } else {
-            List<SanitaryItem> items = sanitaryService.getAll().stream()
-                    .filter(it -> searchText.isEmpty() || it.getName().toLowerCase().contains(searchText))
-                    .toList();
+
+            updateFilterButtonText();
+        }
+
+
+        // =========================================
+        // الأدوات الصحية
+        // =========================================
+
+        else {
+
+            String searchText =
+                    currentSearchText.toLowerCase();
+
+            List<SanitaryItem> items =
+                    sanitaryService.getAll()
+                            .stream()
+                            .filter(
+                                    it ->
+                                            searchText.isEmpty()
+                                                    ||
+                                                    it.getName()
+                                                            .toLowerCase()
+                                                            .contains(searchText)
+                            )
+                            .toList();
+
             for (SanitaryItem it : items) {
-                double reserved = reservedById.getOrDefault(it.getIdNumber(), 0.0);
-                double available = it.getQuantity() - reserved;
-                inventoryModel.addRow(new Object[]{
-                        "", it.getName(), it.getGrade(),
-                        String.format("%.2f", available), "", it.getPrice()
-                });
-                // <<<<<<< جديد: إضافة الكائن نفسه إلى القائمة الموازية
+
+                double reserved =
+                        reservedById.getOrDefault(
+                                it.getIdNumber(),
+                                0.0
+                        );
+
+                double available =
+                        it.getQuantity() - reserved;
+
+                inventoryModel.addRow(
+                        new Object[]{
+                                "",
+                                it.getName(),
+                                it.getGrade(),
+                                String.format(
+                                        "%.2f",
+                                        available
+                                ),
+                                "",
+                                it.getPrice()
+                        }
+                );
+
                 displayedInventoryItems.add(it);
             }
         }
+    }
+    private void toggleFilterPopup() {
+
+        // الفلتر خاص بالبلاط
+        if (!tileRadio.isSelected()) {
+            return;
+        }
+
+        if (filterPopup != null
+                && filterPopup.isVisible()) {
+
+            filterPopup.setVisible(false);
+            return;
+        }
+
+        showFilterPopup();
+    }
+    private void showFilterPopup() {
+
+        if (filterPopup == null) {
+            createFilterPopup();
+        }
+
+        filterPopup.show(
+                filterButton,
+                0,
+                filterButton.getHeight()
+        );
+    }
+    private void createFilterPopup() {
+
+        filterPopup =
+                new JPopupMenu();
+
+        filterPopup.setLayout(
+                new BorderLayout()
+        );
+
+
+        // =========================================
+        // بيانات البلاط الحالية
+        // =========================================
+
+        List<TileItem> items =
+                tileService.getAll();
+
+
+        // =========================================
+        // إنشاء لوحة الفلترة
+        // =========================================
+
+        tileFilterPanel =
+                new TileFilterPanel(
+                        items,
+                        getWarehousesForFilter(),
+                        currentFilter
+                );
+
+
+        // =========================================
+        // عند الضغط على فلترة
+        // =========================================
+
+        tileFilterPanel.setOnFilterApplied(
+                () -> {
+
+                    reloadInventory();
+
+                    filterPopup.setVisible(false);
+                }
+        );
+
+
+        // =========================================
+        // عند مسح الفلتر
+        // =========================================
+
+        tileFilterPanel.setOnClearApplied(
+                () -> {
+
+                    reloadInventory();
+                }
+        );
+
+
+        filterPopup.add(
+                tileFilterPanel,
+                BorderLayout.CENTER
+        );
     }
     private void addSelectedToInvoice() {
         int r = inventoryTable.getSelectedRow();
@@ -384,6 +654,7 @@ public class NewInvoicePanel extends JPanel {
                 return;
             }
             LocalDateTime dt = currentInvoice.getDate() != null ? currentInvoice.getDate() : LocalDateTime.parse(dateField.getText().trim(), dtf);
+
             currentInvoice.addPayment(amt, dt);
             paymentAmountField.setText("");
             updateTotalsAndPayments();

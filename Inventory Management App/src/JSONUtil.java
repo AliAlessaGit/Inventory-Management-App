@@ -51,4 +51,42 @@ public class JSONUtil {
             return new ArrayList<>();
         }
     }
+    public static void writeObject(String path, Object data) {
+
+        File f = new File(path);
+
+        File parent = f.getParentFile();
+
+        if (parent != null && !parent.exists()) {
+            parent.mkdirs();
+        }
+
+        try (Writer writer = new FileWriter(path)) {
+
+            GSON_PRETTY.toJson(data, writer);
+
+        } catch (IOException e) {
+
+            e.printStackTrace();
+        }
+    }
+    public static <T> T readObject(String path, Class<T> itemType) {
+
+        File f = new File(path);
+
+        if (!f.exists()) {
+            return null;
+        }
+
+        try (Reader reader = new FileReader(path)) {
+
+            return GSON_DEFAULT.fromJson(reader, itemType);
+
+        } catch (IOException e) {
+
+            e.printStackTrace();
+
+            return null;
+        }
+    }
 }

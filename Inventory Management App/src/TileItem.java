@@ -34,6 +34,7 @@ public class TileItem extends InventoryItem implements Serializable {
     }
     public void applyUpdatesFrom(TileItem other) {
         if (other == null) return;
+
         setName(other.getName());
         setGrade(other.getGrade());
         setCode(other.getCode());
@@ -42,9 +43,22 @@ public class TileItem extends InventoryItem implements Serializable {
         setPrice(other.getPrice());
         setMaterialType(other.getMaterialType());
         setSubType(other.getSubType());
+
         setWarehouse(other.getWarehouse());
-        // اضف ما يلزم من حقول
+
+        // مهم جدًا:
+        // يجب تحديث رقم المستودع أيضًا حتى تبقى بيانات الفلترة متطابقة.
+        if (other.getWarehouse() != null) {
+            this.warehouseNumber = other.getWarehouse().getId();
+        } else {
+            this.warehouseNumber = other.getWarehouseNumber();
+        }
+
+        // مهم جدًا:
+        // كان الموقع لا يتم تحديثه في الكود القديم.
+        setLocation(other.getLocation());
     }
+
     private String code; // أزلنا القيمة الافتراضية "00" من هنا
     private double boxes;
     private double boxArea;

@@ -13,6 +13,7 @@ public class InvoiceItem implements Serializable {
     private String grade;   // النخب
     private LocalDateTime date; // <<<<<<<  أضف هذا الحقل
 
+    private boolean externalItem;
     // --- كونستركتور للأدوات الصحية ---
     // داخل InvoiceItem
     public InvoiceItem(long idNumber, String name, double quantity, double unitPrice, double boxArea, boolean isTile, String code, String grade, LocalDateTime date) {
@@ -41,13 +42,26 @@ public class InvoiceItem implements Serializable {
         this.boxArea = 0; // or whatever default
         this.code = ""; // or whatever default
     }
+    // --- Constructor للعنصر الخارجي ---
+    public InvoiceItem(String name, double quantity, double unitPrice, LocalDateTime date) {
+        this.idNumber = 0;
+        this.name = name;
+        this.quantity = quantity;
+        this.unitPrice = unitPrice;
+        this.boxArea = 0;
+        this.isTile = false;
+        this.code = "";
+        this.grade = "";
+        this.date = date;
+        this.externalItem = true;
+    }
 
     // <<<<<<< أضف هذا التابع (method)
     public String getFormattedDate() {
         if (this.date == null) {
             return ""; // أو تاريخ الفاتورة الافتراضي إذا لزم الأمر
         }
-        return this.date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        return this.date.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
     }
     // ==== Getters ====
     public long getIdNumber() { return idNumber; }
@@ -56,6 +70,9 @@ public class InvoiceItem implements Serializable {
     public double getUnitPrice() { return unitPrice; }
     public double getBoxArea() { return boxArea; }
     public boolean isTile() { return isTile; }
+    public boolean isExternalItem() {
+        return externalItem;
+    }
     public String getCode() { return isTile ? code : ""; }
     public String getGrade() { return grade; }
 

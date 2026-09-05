@@ -1,7 +1,5 @@
 import javax.swing.*;
 import javax.swing.border.LineBorder;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 
@@ -18,10 +16,13 @@ public class AccountsPanel extends JPanel {
     private JTable entriesTable;
     private EntriesTableModel entriesModel;
 
-    private JLabel balanceLabel;
+    private JButton addInvoiceBtn;
+    private JButton deleteInvoiceBtn;
     private JButton addEntryBtn;
     private JButton deleteEntryBtn;
     private JButton removeAccountBtn;
+
+    private JLabel balanceLabel;
 
     private Account currentAccount;
     private AccountInvoice currentInvoice;
@@ -44,7 +45,7 @@ public class AccountsPanel extends JPanel {
 
     private JPanel buildAccountsPanel() {
         JPanel right = new JPanel(new BorderLayout(8, 8));
-        right.setPreferredSize(new Dimension(280, 0));
+        right.setPreferredSize(new Dimension(260, 0));
         right.setBorder(new LineBorder(Color.BLACK));
         right.setBackground(Color.WHITE);
 
@@ -81,6 +82,19 @@ public class AccountsPanel extends JPanel {
         center.setBorder(new LineBorder(Color.BLACK));
         center.setBackground(Color.WHITE);
 
+        // ===== أزرار الفواتير =====
+        JPanel invoiceBar = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        invoiceBar.setBackground(Color.WHITE);
+
+        addInvoiceBtn = new JButton("إضافة فاتورة");
+        deleteInvoiceBtn = new JButton("حذف فاتورة");
+
+        addInvoiceBtn.setEnabled(false);
+        deleteInvoiceBtn.setEnabled(false);
+
+        invoiceBar.add(addInvoiceBtn);
+        invoiceBar.add(deleteInvoiceBtn);
+
         // ===== جدول الفواتير =====
         invoicesModel = new InvoicesTableModel(null);
         invoicesTable = new JTable(invoicesModel);
@@ -100,9 +114,9 @@ public class AccountsPanel extends JPanel {
         bold.setFont(bold.getFont().deriveFont(Font.BOLD));
         entriesTable.getColumnModel().getColumn(3).setCellRenderer(bold);
 
-        // ===== الأزرار =====
-        JPanel topBar = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        topBar.setBackground(Color.WHITE);
+        // ===== أزرار القيود =====
+        JPanel entryBar = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        entryBar.setBackground(Color.WHITE);
 
         addEntryBtn = new JButton("إضافة قيد");
         deleteEntryBtn = new JButton("حذف قيد");
@@ -110,8 +124,8 @@ public class AccountsPanel extends JPanel {
         addEntryBtn.setEnabled(false);
         deleteEntryBtn.setEnabled(false);
 
-        topBar.add(addEntryBtn);
-        topBar.add(deleteEntryBtn);
+        entryBar.add(addEntryBtn);
+        entryBar.add(deleteEntryBtn);
 
         addEntryBtn.addActionListener(e -> onAddEntry());
         deleteEntryBtn.addActionListener(e -> onDeleteEntry());
@@ -131,9 +145,17 @@ public class AccountsPanel extends JPanel {
                 new JScrollPane(invoicesTable),
                 new JScrollPane(entriesTable)
         );
-        split.setResizeWeight(0.35);
+        split.setResizeWeight(0.4);
 
-        center.add(topBar, BorderLayout.NORTH);
+        // أحداث الفواتير
+        addInvoiceBtn.addActionListener(e -> onAddInvoice());
+        deleteInvoiceBtn.addActionListener(e -> onDeleteInvoice());
+
+        JPanel top = new JPanel(new BorderLayout());
+        top.add(invoiceBar, BorderLayout.NORTH);
+        top.add(entryBar, BorderLayout.SOUTH);
+
+        center.add(top, BorderLayout.NORTH);
         center.add(split, BorderLayout.CENTER);
         center.add(bottom, BorderLayout.SOUTH);
         return center;
@@ -148,9 +170,12 @@ public class AccountsPanel extends JPanel {
             entriesModel.setEntries(null);
             return;
         }
+
         currentAccount = manager.getAccounts().get(row);
         invoicesModel.setInvoices(currentAccount.getAccountInvoices());
         entriesModel.setEntries(null);
+
+        addInvoiceBtn.setEnabled(true);
         removeAccountBtn.setEnabled(true);
         updateBalance();
     }
@@ -160,11 +185,43 @@ public class AccountsPanel extends JPanel {
             currentInvoice = null;
             entriesModel.setEntries(null);
             addEntryBtn.setEnabled(false);
+            deleteInvoiceBtn.setEnabled(false);
             return;
         }
+
         currentInvoice = currentAccount.getAccountInvoices().get(row);
         entriesModel.setEntries(currentInvoice.getEntries());
         addEntryBtn.setEnabled(true);
+        deleteInvoiceBtn.setEnabled(true);
+    }
+
+    private void onAddInvoice() {
+        if (currentAccount == null) return;
+
+        //AccountInvoice inv = new AccountInvoice();
+        //currentAccount.addAccountInvoice(inv);
+
+        manager.saveQuietly();
+        invoicesModel.fireTableDataChanged();
+        updateBalance();
+    }
+
+    private void onDeleteInvoice() {
+        int r = invoicesTable.getSelectedRow();
+        if (r < 0 || currentAccount == null) return;
+
+        if (JOptionPane.showConfirmDialog(
+                this,
+                "هل تريد حذف هذه الفاتورة؟",
+                "تأكيد",
+                JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+
+            currentAccount.getAccountInvoices().remove(r);
+            manager.saveQuietly();
+            invoicesModel.fireTableDataChanged();
+            entriesModel.setEntries(null);
+            updateBalance();
+        }
     }
 
     private void onAddEntry() {
@@ -200,11 +257,10 @@ public class AccountsPanel extends JPanel {
         }
     }
 
-    // ================= أدوات =================
-
     private void onAddAccount() {
         String name = JOptionPane.showInputDialog(this, "اسم الحساب:");
         if (name == null || name.trim().isEmpty()) return;
+
         manager.addAccount(name.trim());
         manager.saveQuietly();
         accountsModel.fireTableDataChanged();
@@ -213,6 +269,7 @@ public class AccountsPanel extends JPanel {
     private void onRemoveAccount() {
         int r = accountsTable.getSelectedRow();
         if (r < 0) return;
+
         manager.removeAccount(manager.getAccounts().get(r));
         manager.saveQuietly();
         accountsModel.fireTableDataChanged();
@@ -220,6 +277,7 @@ public class AccountsPanel extends JPanel {
 
     private void updateBalance() {
         if (currentAccount == null) return;
+
         balanceLabel.setText(String.format(
                 "الرصيد الحالي: %.2f (%s)",
                 Math.abs(currentAccount.getBalance()),

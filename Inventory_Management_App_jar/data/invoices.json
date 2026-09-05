@@ -25,6 +25,17 @@
         "code": "",
         "grade": "3",
         "date": "2025-11-17T19:31:00"
+      },
+      {
+        "idNumber": 1,
+        "name": "روشان فاتح",
+        "quantity": 1.5,
+        "unitPrice": -6.0,
+        "boxArea": 1.4,
+        "isTile": true,
+        "code": "00",
+        "grade": "3",
+        "date": "2026-08-27T11:32:00"
       }
     ],
     "date": "2025-11-17T19:31:24.7323947",
@@ -32,6 +43,32 @@
       {
         "amount": 30.0,
         "date": "2025-11-17T19:36:00"
+      }
+    ],
+    "discount": 0.0
+  },
+  {
+    "invoiceNumber": "FA0002",
+    "customerName": "محمد السامية",
+    "customerPhone": "463",
+    "items": [
+      {
+        "idNumber": 1,
+        "name": "روشان فاتح",
+        "quantity": 6.0,
+        "unitPrice": 6.0,
+        "boxArea": 1.4,
+        "isTile": true,
+        "code": "00",
+        "grade": "3",
+        "date": "2026-08-27T11:30:00"
+      }
+    ],
+    "date": "2026-08-27T11:30:19.8136153",
+    "payments": [
+      {
+        "amount": 50.4,
+        "date": "2026-08-27T11:30:19.8136153"
       }
     ],
     "discount": 0.0

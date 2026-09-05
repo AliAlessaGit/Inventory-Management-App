@@ -1,3 +1,4 @@
+// Account.java
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -6,12 +7,11 @@ public class Account implements Serializable {
 
     private String name;
 
-    // ⚠ لا final
-    private List<AccountInvoice> AccountInvoices;
+    // حركات الحساب (AccountInvoice) — ليست Invoice
+    private final List<AccountInvoice> AccountInvoices = new ArrayList<>();
 
     public Account(String name) {
         this.name = name;
-        this.AccountInvoices = new ArrayList<>();
     }
 
     /* ===== بيانات الحساب ===== */
@@ -24,23 +24,20 @@ public class Account implements Serializable {
         this.name = name;
     }
 
-    /* ===== حماية من null (مهم جدًا مع Gson) ===== */
+    /* ===== إدارة AccountInvoices ===== */
 
     public List<AccountInvoice> getAccountInvoices() {
-        if (AccountInvoices == null) {
-            AccountInvoices = new ArrayList<>();
-        }
         return AccountInvoices;
     }
 
     public void addAccountInvoice(AccountInvoice accountInvoice) {
-        getAccountInvoices().add(accountInvoice);
+        AccountInvoices.add(accountInvoice);
     }
 
     /* ===== الرصيد ===== */
 
     public double getBalance() {
-        return getAccountInvoices().stream()
+        return AccountInvoices.stream()
                 .mapToDouble(AccountInvoice::getTotal)
                 .sum();
     }

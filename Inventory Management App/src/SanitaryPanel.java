@@ -13,6 +13,11 @@ public class SanitaryPanel extends JPanel {
     private JTable sanitaryTable;
     private DefaultTableModel sanitaryTableModel;
     private List<SanitaryItem> displayedItems;
+    private CurrencySettingsService currencySettingsService;
+
+    private boolean showPricesInSyrian = false;
+
+    private JToggleButton currencyToggle;
 
     // --- التغيير: إضافة لون التركيز ---
     private final Color FOCUS_YELLOW = Color.YELLOW;
@@ -24,10 +29,16 @@ public class SanitaryPanel extends JPanel {
     private final Color PRIMARY_COLOR = new Color(63, 81, 181);
 
     private JLabel sumLabel;
+    public SanitaryPanel(
+            SanitaryService sanitaryService,
+            CurrencySettingsService currencySettingsService) {
 
-    public SanitaryPanel(SanitaryService sanitaryService) {
         this.sanitaryService = sanitaryService;
+        this.currencySettingsService =
+                currencySettingsService;
+
         this.displayedItems = new ArrayList<>();
+
         setLayout(new BorderLayout(15, 15));
         setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         initUI();
@@ -37,6 +48,39 @@ public class SanitaryPanel extends JPanel {
         JPanel topPanel = new JPanel(new BorderLayout(10, 15));
         JPanel filterPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
         JPanel searchAndRefreshPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+
+
+        currencyToggle =
+                new JToggleButton("USD");
+
+
+        currencyToggle.setFont(BUTTON_FONT);
+
+        currencyToggle.setPreferredSize(
+                new Dimension(100, 40)
+        );
+
+        currencyToggle.setCursor(
+                new Cursor(Cursor.HAND_CURSOR)
+        );
+
+        currencyToggle.addActionListener(e -> {
+
+            showPricesInSyrian =
+                    currencyToggle.isSelected();
+
+            currencyToggle.setText(
+                    showPricesInSyrian
+                            ? "SYP"
+                            : "USD"
+            );
+
+            updateCurrencyColumnNames();
+
+            refreshTable();
+        });
+
+
 
         JTextField searchField = new JTextField(20);
         searchField.setFont(LARGE_FONT);
@@ -51,6 +95,8 @@ public class SanitaryPanel extends JPanel {
 
         searchAndRefreshPanel.add(searchField);
         searchAndRefreshPanel.add(refreshButton);
+        searchAndRefreshPanel.add(currencyToggle);
+
 
         String[] filterOptions = new String[SanitaryItem.SanitaryType.values().length + 1];
         filterOptions[0] = "كل الأنواع";
@@ -421,16 +467,65 @@ public class SanitaryPanel extends JPanel {
         double sum = 0;
 
         for (SanitaryItem item : displayedItems) {
-            double totalValue = item.getTotalValue();
-            sanitaryTableModel.addRow(new Object[]{
-                    item.getName(), item.getType().getArabicName(), item.getGrade(),
-                    String.format("%.2f $", item.getPrice()), String.valueOf(item.getQuantity()),
-                    String.format("%.2f $", totalValue)
-            });
+
+            double price =
+                    item.getPrice();
+
+            double totalValue =
+                    item.getTotalValue();
+
+            if (showPricesInSyrian) {
+
+                double rate =
+                        currencySettingsService
+                                .getDollarToSyrianRate();
+
+                price =
+                        price * rate;
+
+                totalValue =
+                        totalValue * rate;
+            }
+
+            sanitaryTableModel.addRow(
+                    new Object[]{
+                            item.getName(),
+                            item.getType().getArabicName(),
+                            item.getGrade(),
+                            String.format(
+                                    "%,.2f",
+                                    price
+                            ),
+                            String.valueOf(
+                                    item.getQuantity()
+                            ),
+                            String.format(
+                                    "%,.2f",
+                                    totalValue
+                            )
+                    }
+            );
+
             sum += totalValue;
         }
+        if (showPricesInSyrian) {
 
-        sumLabel.setText(String.format(" المجموع الكلي: %.2f $", sum));
+            sumLabel.setText(
+                    String.format(
+                            "المجموع الكلي: %,.2f SYP",
+                            sum
+                    )
+            );
+
+        } else {
+
+            sumLabel.setText(
+                    String.format(
+                            "المجموع الكلي: %,.2f USD",
+                            sum
+                    )
+            );
+        }
         if (sum > 10000) {
             sumLabel.setForeground(new Color(76, 175, 80));
         } else if (sum > 5000) {
@@ -438,5 +533,29 @@ public class SanitaryPanel extends JPanel {
         } else {
             sumLabel.setForeground(new Color(96, 125, 139));
         }
+    }
+    private void updateCurrencyColumnNames() {
+
+        sanitaryTable
+                .getColumnModel()
+                .getColumn(3)
+                .setHeaderValue(
+                        showPricesInSyrian
+                                ? "السعر (SYP)"
+                                : "السعر (USD)"
+                );
+
+        sanitaryTable
+                .getColumnModel()
+                .getColumn(5)
+                .setHeaderValue(
+                        showPricesInSyrian
+                                ? "القيمة الإجمالية (SYP)"
+                                : "القيمة الإجمالية (USD)"
+                );
+
+        sanitaryTable
+                .getTableHeader()
+                .repaint();
     }
 }

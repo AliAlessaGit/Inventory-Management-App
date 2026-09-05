@@ -1,9 +1,9 @@
 [
   {
     "code": "00",
-    "boxes": 47.0,
+    "boxes": 25.5,
     "boxArea": 1.4,
-    "materialType": "سيراميك",
+    "materialType": "غرانيت",
     "subType": "جدران",
     "warehouseNumber": 1,
     "grade": "3",
@@ -17,6 +17,86 @@
     "location": "رقم_1",
     "idNumber": 1,
     "name": "روشان فاتح",
+    "price": 6.0
+  },
+  {
+    "code": "3524",
+    "boxes": 194.0,
+    "boxArea": 1.8,
+    "materialType": "سيراميك",
+    "subType": "ارضيات",
+    "warehouseNumber": 1,
+    "grade": "1",
+    "warehouse": {
+      "id": 1,
+      "name": "خاص",
+      "type": "OWNED",
+      "ownerName": "",
+      "ownerContact": ""
+    },
+    "location": "رقم_3",
+    "idNumber": 3,
+    "name": "سعودي مرخم",
+    "price": 8.0
+  },
+  {
+    "code": "432",
+    "boxes": 3.0,
+    "boxArea": 45.0,
+    "materialType": "سيراميك",
+    "subType": "ارضيات",
+    "warehouseNumber": 1,
+    "grade": "3245",
+    "warehouse": {
+      "id": 1,
+      "name": "خاص",
+      "type": "OWNED",
+      "ownerName": "",
+      "ownerContact": ""
+    },
+    "location": "رقم_1",
+    "idNumber": 4,
+    "name": "2345",
+    "price": 3425.0
+  },
+  {
+    "code": "4325",
+    "boxes": 3425.0,
+    "boxArea": 324.0,
+    "materialType": "سيراميك",
+    "subType": "ارضيات",
+    "warehouseNumber": 1,
+    "grade": "1",
+    "warehouse": {
+      "id": 1,
+      "name": "خاص",
+      "type": "OWNED",
+      "ownerName": "",
+      "ownerContact": ""
+    },
+    "location": "رقم_1",
+    "idNumber": 5,
+    "name": "234652بيس",
+    "price": 345.0
+  },
+  {
+    "code": "43",
+    "boxes": 34.0,
+    "boxArea": 133.0,
+    "materialType": "سيراميك",
+    "subType": "ارضيات",
+    "warehouseNumber": 1,
+    "grade": "464",
+    "warehouse": {
+      "id": 1,
+      "name": "خاص",
+      "type": "OWNED",
+      "ownerName": "",
+      "ownerContact": ""
+    },
+    "location": "رقم_1",
+    "idNumber": 6,
+    "name": "لبلابي",
     "price": 6.0
   }
 ]
