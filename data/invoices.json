@@ -2,7 +2,7 @@
   {
     "invoiceNumber": "FA0001",
     "customerName": "علي العيسى",
-    "customerPhone": "0930502114",
+    "customerPhone": "0930502115",
     "items": [
       {
         "idNumber": 1,
@@ -87,6 +87,114 @@
         "grade": "3",
         "date": "2026-09-03T17:23:00",
         "externalItem": false
+      },
+      {
+        "idNumber": 0,
+        "name": "ايلا",
+        "quantity": 6.0,
+        "unitPrice": 6.0,
+        "boxArea": 1.0,
+        "isTile": true,
+        "code": "00",
+        "grade": "3",
+        "date": "2026-09-10T12:24:16.4023988",
+        "externalItem": true
+      },
+      {
+        "idNumber": 0,
+        "name": "سانسا",
+        "quantity": 2.0,
+        "unitPrice": 4.0,
+        "boxArea": 1.75,
+        "isTile": true,
+        "code": "00",
+        "grade": "3",
+        "date": "2026-09-10T13:05:47.6276172",
+        "externalItem": true
+      },
+      {
+        "idNumber": 0,
+        "name": "ول",
+        "quantity": 2.0,
+        "unitPrice": 4.0,
+        "boxArea": 0.0,
+        "isTile": false,
+        "code": "",
+        "grade": "",
+        "date": "2026-09-10T13:11:00",
+        "externalItem": true
+      },
+      {
+        "idNumber": 4,
+        "name": "2345",
+        "quantity": 1.0,
+        "unitPrice": 5.0,
+        "boxArea": 45.0,
+        "isTile": true,
+        "code": "432",
+        "grade": "3245",
+        "date": "2026-09-10T13:11:00",
+        "externalItem": false
+      },
+      {
+        "idNumber": 0,
+        "name": "سانسا",
+        "quantity": 1.0,
+        "unitPrice": -4.0,
+        "boxArea": 1.75,
+        "isTile": true,
+        "code": "00",
+        "grade": "3",
+        "date": "2026-09-10T13:16:00",
+        "externalItem": false
+      },
+      {
+        "idNumber": 2,
+        "name": "جوري 50",
+        "quantity": 1.0,
+        "unitPrice": -14.0,
+        "boxArea": 0.0,
+        "isTile": false,
+        "code": "",
+        "grade": "3",
+        "date": "2026-09-10T13:50:00",
+        "externalItem": false
+      },
+      {
+        "idNumber": 2,
+        "name": "جوري 50",
+        "quantity": 1.0,
+        "unitPrice": -14.0,
+        "boxArea": 0.0,
+        "isTile": false,
+        "code": "",
+        "grade": "3",
+        "date": "2026-09-10T13:52:00",
+        "externalItem": false
+      },
+      {
+        "idNumber": 0,
+        "name": "طاقية محمد",
+        "quantity": 2.0,
+        "unitPrice": 5.0,
+        "boxArea": 3.1,
+        "isTile": true,
+        "code": "00",
+        "grade": "9",
+        "date": "2026-09-10T13:56:55.6576576",
+        "externalItem": true
+      },
+      {
+        "idNumber": 0,
+        "name": "شخة سيارة",
+        "quantity": 2.0,
+        "unitPrice": -5.0,
+        "boxArea": 0.0,
+        "isTile": false,
+        "code": "",
+        "grade": "",
+        "date": "2026-09-10T17:24:00",
+        "externalItem": false
       }
     ],
     "date": "2025-11-17T19:31:24.7323947",
@@ -105,7 +213,7 @@
         "dollarAmount": 100.0
       }
     ],
-    "discount": 2.2
+    "discount": 0.0
   },
   {
     "invoiceNumber": "FA0002",
@@ -262,6 +370,18 @@
         "grade": "1",
         "date": "2026-09-03T10:09:00",
         "externalItem": false
+      },
+      {
+        "idNumber": 3,
+        "name": "سعودي مرخم",
+        "quantity": 1.0,
+        "unitPrice": 8.0,
+        "boxArea": 1.8,
+        "isTile": true,
+        "code": "3524",
+        "grade": "1",
+        "date": "2026-09-10T13:59:00",
+        "externalItem": false
       }
     ],
     "date": "2026-09-03T10:09:21.5108715",
@@ -303,6 +423,30 @@
         "code": "00",
         "grade": "3",
         "date": "2026-09-03T18:25:00",
+        "externalItem": false
+      },
+      {
+        "idNumber": 1,
+        "name": "روشان فاتح",
+        "quantity": 4.0,
+        "unitPrice": 6.0,
+        "boxArea": 1.4,
+        "isTile": true,
+        "code": "00",
+        "grade": "3",
+        "date": "2026-09-05T17:36:00",
+        "externalItem": false
+      },
+      {
+        "idNumber": 1,
+        "name": "روشان فاتح",
+        "quantity": 3.0,
+        "unitPrice": 6.0,
+        "boxArea": 1.4,
+        "isTile": true,
+        "code": "00",
+        "grade": "3",
+        "date": "2026-09-05T17:56:00",
         "externalItem": false
       }
     ],

@@ -1,7 +1,7 @@
 [
   {
     "code": "00",
-    "boxes": 25.5,
+    "boxes": 18.5,
     "boxArea": 1.4,
     "materialType": "غرانيت",
     "subType": "جدران",
@@ -21,7 +21,7 @@
   },
   {
     "code": "3524",
-    "boxes": 194.0,
+    "boxes": 193.0,
     "boxArea": 1.8,
     "materialType": "سيراميك",
     "subType": "ارضيات",
@@ -41,7 +41,7 @@
   },
   {
     "code": "432",
-    "boxes": 3.0,
+    "boxes": 2.0,
     "boxArea": 45.0,
     "materialType": "سيراميك",
     "subType": "ارضيات",
@@ -58,26 +58,6 @@
     "idNumber": 4,
     "name": "2345",
     "price": 3425.0
-  },
-  {
-    "code": "4325",
-    "boxes": 3425.0,
-    "boxArea": 324.0,
-    "materialType": "سيراميك",
-    "subType": "ارضيات",
-    "warehouseNumber": 1,
-    "grade": "1",
-    "warehouse": {
-      "id": 1,
-      "name": "خاص",
-      "type": "OWNED",
-      "ownerName": "",
-      "ownerContact": ""
-    },
-    "location": "رقم_1",
-    "idNumber": 5,
-    "name": "234652بيس",
-    "price": 345.0
   },
   {
     "code": "43",

@@ -1,3 +1,20 @@
+import backEnd.account.AccountsManager;
+import backEnd.currency.CurrencySettingsService;
+import backEnd.invoice.InvoiceService;
+import backEnd.sanitary.SanitaryService;
+import backEnd.tile.TileService;
+import backEnd.warehouse.Warehouse;
+import backEnd.warehouse.WarehouseManager;
+
+import frontEnd.account.AccountsPanel;
+import frontEnd.currency.CurrencySettingsPanel;
+import frontEnd.inventory.AddItemPanel;
+import frontEnd.invoice.InvoicePanel;
+import frontEnd.invoice.NewInvoicePanel;
+import frontEnd.sanitary.SanitaryPanel;
+import frontEnd.tile.TilePanel;
+import frontEnd.warehouse.WarehousePanel;
+
 import com.formdev.flatlaf.FlatLightLaf;
 
 import javax.imageio.ImageIO;

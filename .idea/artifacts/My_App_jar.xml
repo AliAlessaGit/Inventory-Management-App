@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="My App:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/My_App_jar</output-path>
+    <root id="archive" name="My App.jar">
+      <element id="module-output" name="My App" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/Libs/gson-2.10.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/Libs/flatlaf-3.6.1.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

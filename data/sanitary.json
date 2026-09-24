@@ -1,6 +1,6 @@
 [
   {
-    "quantity": 28,
+    "quantity": 30,
     "type": "LOCAL_WASHBASIN",
     "warehouse": {
       "id": 1,
@@ -13,5 +13,20 @@
     "idNumber": 2,
     "name": "جوري 50",
     "price": 14.0
+  },
+  {
+    "quantity": 5,
+    "type": "KITCHEN_SINK",
+    "warehouse": {
+      "id": 1,
+      "name": "خاص",
+      "type": "OWNED",
+      "ownerName": "",
+      "ownerContact": ""
+    },
+    "grade": "1",
+    "idNumber": 7,
+    "name": "مجلى سمارت",
+    "price": 70.0
   }
 ]
