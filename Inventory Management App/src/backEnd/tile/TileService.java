@@ -9,14 +9,13 @@ import java.util.List;
 
 public class TileService {
 
-    private List<backEnd.tile.TileItem> tileItems = new ArrayList<>();
+    private List<TileItem> tileItems = new ArrayList<>();
 
     private final String dataPath;
 
     private List<Warehouse> warehouses;
 
     private final TileFilterService tileFilterService;
-
 
     public TileService(
             String dataPath,
@@ -29,11 +28,29 @@ public class TileService {
         load();
     }
 
+    // =========================================================
+    // الوصول إلى البيانات
+    // =========================================================
 
     public List<TileItem> getAll() {
         return tileItems;
     }
 
+    public TileItem findById(long id) {
+
+        for (TileItem item : tileItems) {
+
+            if (item.getIdNumber() == id) {
+                return item;
+            }
+        }
+
+        return null;
+    }
+
+    // =========================================================
+    // CRUD
+    // =========================================================
 
     public void add(TileItem item) {
 
@@ -44,26 +61,18 @@ public class TileService {
         tileItems.add(item);
     }
 
-
     public void remove(TileItem item) {
 
         if (item == null) {
             return;
         }
 
+        boolean removed = tileItems.remove(item);
 
-        boolean removed =
-                tileItems.remove(item);
-
-
-        /*
-         * نحفظ الملف فقط إذا تم حذف العنصر فعليًا.
-         */
         if (removed) {
             save();
         }
     }
-
 
     public void update(
             TileItem oldItem,
@@ -73,20 +82,24 @@ public class TileService {
             return;
         }
 
-        int idx = tileItems.indexOf(oldItem);
+        int index = tileItems.indexOf(oldItem);
 
-        if (idx >= 0) {
-
-            oldItem.applyUpdatesFrom(updatedValues);
-
-            InventoryItem.bumpIdCounterIfNeeded(
-                    oldItem.getIdNumber()
-            );
-
-            save();
+        if (index < 0) {
+            return;
         }
+
+        oldItem.applyUpdatesFrom(updatedValues);
+
+        InventoryItem.bumpIdCounterIfNeeded(
+                oldItem.getIdNumber()
+        );
+
+        save();
     }
 
+    // =========================================================
+    // الحفظ والتحميل
+    // =========================================================
 
     public void save() {
 
@@ -96,45 +109,38 @@ public class TileService {
         );
     }
 
-
     public void load() {
 
-        this.tileItems =
+        List<TileItem> loadedItems =
                 JSONUtil.readAll(
                         dataPath,
                         TileItem.class
                 );
 
-        if (this.tileItems == null) {
-            this.tileItems = new ArrayList<>();
+        if (loadedItems == null) {
+            loadedItems = new ArrayList<>();
         }
 
-        for (TileItem item : this.tileItems) {
+        this.tileItems = loadedItems;
 
-            InventoryItem.bumpIdCounterIfNeeded(
-                    item.getIdNumber()
-            );
-        }
-    }
+        for (TileItem item : tileItems) {
 
+            if (item != null) {
 
-    public TileItem findById(long id) {
-
-        for (TileItem t : tileItems) {
-
-            if (t.getIdNumber() == id) {
-                return t;
+                InventoryItem.bumpIdCounterIfNeeded(
+                        item.getIdNumber()
+                );
             }
         }
-
-        return null;
     }
 
+    // =========================================================
+    // البحث
+    // =========================================================
 
     /**
-     * البحث القديم.
-     *
-     * يبقى موجودًا للتوافق مع أي واجهة قديمة.
+     * البحث القديم بالاسم أو الكود.
+     * أبقيناه للتوافق مع الواجهات القديمة.
      */
     public List<TileItem> searchByNameOrCode(
             String text) {
@@ -145,10 +151,10 @@ public class TileService {
         );
     }
 
+    // =========================================================
+    // الفلترة
+    // =========================================================
 
-    /**
-     * الفلترة الجديدة.
-     */
     public List<TileItem> filter(
             TileFilter filter) {
 
@@ -158,12 +164,6 @@ public class TileService {
         );
     }
 
-
-    /**
-     * الفلترة + البحث.
-     *
-     * الفلترة تطبق أولاً ثم البحث.
-     */
     public List<TileItem> filterAndSearch(
             TileFilter filter,
             String searchText) {
@@ -175,23 +175,15 @@ public class TileService {
         );
     }
 
-
-    /**
-     * الوصول إلى محرك الفلترة.
-     */
     public TileFilterService getTileFilterService() {
-
         return tileFilterService;
     }
 
+    // =========================================================
+    // الفلترة القديمة
+    // material + warehouse + subtype
+    // =========================================================
 
-    /**
-     * النظام القديم:
-     *
-     * material + warehouse + subtype
-     *
-     * أبقيناه حتى لا نكسر الكود القديم.
-     */
     public List<TileItem> filter(
             String material,
             String warehouse,
@@ -199,10 +191,10 @@ public class TileService {
 
         TileFilter filter = new TileFilter();
 
+        // -----------------------------------------------------
+        // المادة
+        // -----------------------------------------------------
 
-        /*
-         * المادة
-         */
         if (material != null
                 && !material.trim().isEmpty()
                 && !material.equals("كل الأنواع")
@@ -217,14 +209,14 @@ public class TileService {
                 );
 
             } catch (IllegalArgumentException ignored) {
-                // تجاهل القيمة غير المعروفة
+                // القيمة غير معروفة، لذلك نتجاهلها
             }
         }
 
+        // -----------------------------------------------------
+        // النوع الفرعي
+        // -----------------------------------------------------
 
-        /*
-         * النوع
-         */
         if (subtype != null
                 && !subtype.trim().isEmpty()
                 && !subtype.equals("كل الأنواع")
@@ -239,34 +231,45 @@ public class TileService {
                 );
 
             } catch (IllegalArgumentException ignored) {
-                // تجاهل القيمة غير المعروفة
+                // القيمة غير معروفة، لذلك نتجاهلها
             }
         }
 
+        // -----------------------------------------------------
+        // المستودع
+        // -----------------------------------------------------
 
-        /*
-         * المستودع
-         */
         if (warehouse != null
                 && !warehouse.trim().isEmpty()
-                && !warehouse.equals("كل المستودعات")) {
+                && !warehouse.equals("كل المستودعات")
+                && warehouses != null) {
 
-            if (warehouses != null) {
+            for (Warehouse w : warehouses) {
 
-                for (Warehouse w : warehouses) {
+                if (w == null) {
+                    continue;
+                }
 
-                    if (w != null
-                            && w.getDisplayName()
-                            .equals(warehouse)) {
+                if (w.getDisplayName().equals(warehouse)) {
 
-                        filter.addWarehouse(w);
-                        break;
-                    }
+                    filter.addWarehouse(w);
+                    break;
                 }
             }
         }
 
-
         return filter(filter);
+    }
+
+    // =========================================================
+    // إدارة المستودعات
+    // =========================================================
+
+    public List<Warehouse> getWarehouses() {
+        return warehouses;
+    }
+
+    public void setWarehouses(List<Warehouse> warehouses) {
+        this.warehouses = warehouses;
     }
 }

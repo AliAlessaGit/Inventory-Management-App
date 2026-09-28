@@ -126,7 +126,10 @@ public class MainFrame extends JFrame {
         tabbedPane.addTab(
                 "الحسابات",
                 new AccountsPanel(
-                        accountsManager
+                        accountsManager,
+                        tileService,
+                        sanitaryService,
+                        warehouseManager
                 )
         );
 

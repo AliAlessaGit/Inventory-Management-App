@@ -21,12 +21,12 @@
   },
   {
     "code": "00",
-    "boxes": 21.1,
+    "boxes": 65.1,
     "boxArea": 32.0,
     "materialType": "سيراميك",
     "subType": "ارضيات",
     "warehouseNumber": 1,
-    "grade": "32",
+    "grade": "3",
     "warehouse": {
       "id": 1,
       "name": "ابو عمر",
@@ -37,6 +37,26 @@
     "location": "رقم_1",
     "idNumber": 7,
     "name": "يشسلي",
-    "price": 3.0
+    "price": 0.0
+  },
+  {
+    "code": "4534",
+    "boxes": 44.0,
+    "boxArea": 1.35,
+    "materialType": "سيراميك",
+    "subType": "جدران",
+    "warehouseNumber": 1,
+    "grade": "3",
+    "warehouse": {
+      "id": 1,
+      "name": "ابو عمر",
+      "type": "OWNED",
+      "ownerName": "",
+      "ownerContact": ""
+    },
+    "location": "رقم_3",
+    "idNumber": 9,
+    "name": "نيو شام",
+    "price": 7.0
   }
 ]

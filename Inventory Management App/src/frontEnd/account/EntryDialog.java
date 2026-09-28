@@ -3,8 +3,7 @@ package frontEnd.account;
 import backEnd.account.AccountEntry;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
@@ -12,205 +11,153 @@ import java.util.List;
 
 public class EntryDialog extends JDialog {
 
-    private JTextField descF, debitF, creditF, qtyF, unitF, unitPriceF, totalF;
-    private boolean ok = false;
+    private final JTextField materialField = new JTextField();
+    private final JTextField quantity1Field = new JTextField("0");
+    private final JTextField unitField = new JTextField("قطعة");
+    private final JTextField priceField = new JTextField("0");
+    private final JTextField totalField = new JTextField("0.00");
+    private final JTextField quantity2Field = new JTextField("0");
+
+    private boolean ok;
 
     public EntryDialog(Window parent) {
-        super(parent, "إضافة / تعديل قيد", ModalityType.APPLICATION_MODAL);
-        setSize(650, 420);
+        super(parent, "إضافة سطر إلى المبيع", ModalityType.APPLICATION_MODAL);
+        setSize(720, 480);
         setLocationRelativeTo(parent);
-        setLayout(new BorderLayout(10, 10));
+        setLayout(new BorderLayout());
         getContentPane().setBackground(Color.WHITE);
+        setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+
+        totalField.setEditable(false);
 
         JPanel form = new JPanel(new GridBagLayout());
         form.setBackground(Color.WHITE);
-        form.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+        form.setBorder(new EmptyBorder(20, 25, 10, 25));
 
-        GridBagConstraints g = new GridBagConstraints();
-        g.insets = new Insets(8, 8, 8, 8);
-        g.fill = GridBagConstraints.HORIZONTAL;
-        g.weightx = 1.0;
+        addRow(form, 0, "المادة:", materialField, "اسم المادة");
+        addRow(form, 1, "الكمية 1:", quantity1Field, "الكمية الأساسية");
+        addRow(form, 2, "الوحدة:", unitField, "الوحدة");
+        addRow(form, 3, "السعر:", priceField, "سعر الوحدة");
+        addRow(form, 4, "الإجمالي:", totalField, "يحسب تلقائياً");
+        addRow(form, 5, "الكمية 2:", quantity2Field, "الكمية الثانية");
 
-        // ===== الحقول =====
-        descF = new JTextField(30);
-        debitF = new JTextField("0", 15);
-        creditF = new JTextField("0", 15);
-        qtyF = new JTextField("0", 15);
-        unitF = new JTextField(15);
-        unitPriceF = new JTextField("0", 15);
+        javax.swing.event.DocumentListener listener = new javax.swing.event.DocumentListener() {
+            public void insertUpdate(javax.swing.event.DocumentEvent e) { calculate(); }
+            public void removeUpdate(javax.swing.event.DocumentEvent e) { calculate(); }
+            public void changedUpdate(javax.swing.event.DocumentEvent e) { calculate(); }
+        };
+        quantity1Field.getDocument().addDocumentListener(listener);
+        priceField.getDocument().addDocumentListener(listener);
 
-        totalF = new JTextField("0.00", 15);
-        totalF.setEditable(false);
-        totalF.setFont(getFont().deriveFont(Font.BOLD));
-
-        // ===== تصميم الواجهة =====
-        g.gridy = 0;
-        g.gridx = 1; g.gridwidth = 3;
-        form.add(descF, g);
-        g.gridx = 0; g.gridwidth = 1;
-        form.add(new JLabel("البيان:"), g);
-
-        g.gridy = 1;
-        addRow(form, g, "العدد:", qtyF, "الوحدة:", unitF);
-
-        g.gridy = 2;
-        addRow(form, g, "مدين:", debitF, "دائن:", creditF);
-
-        g.gridy = 3;
-        addRow(form, g, "الإفرادي:", unitPriceF, "الإجمالي:", totalF);
-
-        // ===== حساب الإجمالي تلقائيًا =====
-        DocumentListener dl = createCalculationListener();
-        qtyF.getDocument().addDocumentListener(dl);
-        unitPriceF.getDocument().addDocumentListener(dl);
-
-        // ===== الأزرار =====
-        JPanel buttons = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JPanel buttons = new JPanel(new FlowLayout(FlowLayout.CENTER, 12, 10));
         buttons.setBackground(Color.WHITE);
-
-        JButton okBtn = new JButton("موافق");
-        JButton cancelBtn = new JButton("إلغاء");
-
-        buttons.add(okBtn);
-        buttons.add(cancelBtn);
-
-        okBtn.addActionListener(e -> onOk());
-        cancelBtn.addActionListener(e -> setVisible(false));
+        JButton okButton = new JButton("موافق");
+        JButton cancelButton = new JButton("إلغاء");
+        buttons.add(okButton);
+        buttons.add(new JLabel("←"));
+        buttons.add(cancelButton);
+        okButton.addActionListener(e -> accept());
+        cancelButton.addActionListener(e -> dispose());
 
         add(form, BorderLayout.CENTER);
         add(buttons, BorderLayout.SOUTH);
-
-        // ===== التنقل بالأسهم =====
-        ArrayList<Component> focusOrder = new ArrayList<>();
-        focusOrder.add(descF);
-        focusOrder.add(qtyF);
-        focusOrder.add(unitF);
-        focusOrder.add(debitF);
-        focusOrder.add(creditF);
-        focusOrder.add(unitPriceF);
-        focusOrder.add(okBtn);
-        focusOrder.add(cancelBtn);
-
-        setFocusTraversalPolicy(new CustomFocusPolicy(focusOrder));
-        setupArrowKeyNavigation();
+        installNavigation(okButton, cancelButton);
     }
 
-    // ================== التنقل ==================
-
-    private void setupArrowKeyNavigation() {
-        InputMap im = getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-        ActionMap am = getRootPane().getActionMap();
-
-        im.put(KeyStroke.getKeyStroke("DOWN"), "focusNext");
-        im.put(KeyStroke.getKeyStroke("RIGHT"), "focusNext");
-        im.put(KeyStroke.getKeyStroke("UP"), "focusPrev");
-        im.put(KeyStroke.getKeyStroke("LEFT"), "focusPrev");
-
-        am.put("focusNext", new AbstractAction() {
-            public void actionPerformed(ActionEvent e) {
-                KeyboardFocusManager.getCurrentKeyboardFocusManager().focusNextComponent();
-            }
-        });
-
-        am.put("focusPrev", new AbstractAction() {
-            public void actionPerformed(ActionEvent e) {
-                KeyboardFocusManager.getCurrentKeyboardFocusManager().focusPreviousComponent();
-            }
-        });
+    private void addRow(JPanel panel, int row, String label, JComponent field, String hint) {
+        GridBagConstraints g = new GridBagConstraints();
+        g.gridy = row;
+        g.insets = new Insets(7, 7, 7, 7);
+        g.fill = GridBagConstraints.HORIZONTAL;
+        g.weightx = .2;
+        g.gridx = 0;
+        panel.add(new JLabel(label), g);
+        g.gridx = 1;
+        g.weightx = .55;
+        panel.add(field, g);
+        g.gridx = 2;
+        g.weightx = .25;
+        JLabel explanation = new JLabel(hint);
+        explanation.setForeground(new Color(100, 100, 100));
+        panel.add(explanation, g);
     }
 
-    private static class CustomFocusPolicy extends FocusTraversalPolicy {
-        private final List<Component> order;
-
-        public CustomFocusPolicy(List<Component> order) {
-            this.order = new ArrayList<>(order);
-        }
-
-        @Override public Component getComponentAfter(Container c, Component comp) {
-            int i = (order.indexOf(comp) + 1) % order.size();
-            return order.get(i);
-        }
-
-        @Override public Component getComponentBefore(Container c, Component comp) {
-            int i = order.indexOf(comp) - 1;
-            return order.get(i < 0 ? order.size() - 1 : i);
-        }
-
-        @Override public Component getFirstComponent(Container c) { return order.get(0); }
-        @Override public Component getLastComponent(Container c) { return order.get(order.size() - 1); }
-        @Override public Component getDefaultComponent(Container c) { return order.get(0); }
-    }
-
-    // ================== منطق ==================
-
-    private void onOk() {
+    private void calculate() {
         try {
-            parseDouble(debitF.getText());
-            parseDouble(creditF.getText());
-            parseDouble(qtyF.getText());
-            parseDouble(unitPriceF.getText());
+            double q = number(quantity1Field);
+            double p = number(priceField);
+            totalField.setText(String.format("%.2f", q * p));
+        } catch (Exception ignored) {
+            totalField.setText("0.00");
+        }
+    }
+
+    private void accept() {
+        try {
+            if (materialField.getText().trim().isEmpty())
+                throw new IllegalArgumentException("المادة مطلوبة");
+            number(quantity1Field);
+            number(quantity2Field);
+            number(priceField);
             ok = true;
-            setVisible(false);
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "الرجاء التأكد من صحة القيم الرقمية",
-                    "خطأ",
-                    JOptionPane.ERROR_MESSAGE
-            );
+            dispose();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this,
+                    ex.getMessage() == null ? "القيم غير صحيحة" : ex.getMessage(),
+                    "تنبيه", JOptionPane.WARNING_MESSAGE);
         }
     }
 
-    private DocumentListener createCalculationListener() {
-        return new DocumentListener() {
-            public void insertUpdate(DocumentEvent e) { calc(); }
-            public void removeUpdate(DocumentEvent e) { calc(); }
-            public void changedUpdate(DocumentEvent e) { calc(); }
+    private double number(JTextField field) {
+        return Double.parseDouble(field.getText().trim().replace(',', '.'));
+    }
 
-            private void calc() {
-                try {
-                    double q = parseDouble(qtyF.getText());
-                    double p = parseDouble(unitPriceF.getText());
-                    totalF.setText(String.format("%.2f", q * p));
-                } catch (Exception e) {
-                    totalF.setText("0.00");
-                }
+    private void installNavigation(JButton okButton, JButton cancelButton) {
+        List<Component> order = new ArrayList<>();
+        order.add(materialField);
+        order.add(quantity1Field);
+        order.add(unitField);
+        order.add(priceField);
+        order.add(quantity2Field);
+        order.add(okButton);
+        order.add(cancelButton);
+        InputMap input = getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap actions = getRootPane().getActionMap();
+        input.put(KeyStroke.getKeyStroke("DOWN"), "next");
+        input.put(KeyStroke.getKeyStroke("RIGHT"), "next");
+        input.put(KeyStroke.getKeyStroke("UP"), "previous");
+        input.put(KeyStroke.getKeyStroke("LEFT"), "previous");
+        input.put(KeyStroke.getKeyStroke("ENTER"), "enter");
+        actions.put("next", new AbstractAction() { public void actionPerformed(ActionEvent e) { move(order, 1); } });
+        actions.put("previous", new AbstractAction() { public void actionPerformed(ActionEvent e) { move(order, -1); } });
+        actions.put("enter", new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                Component c = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
+                if (c == okButton) okButton.doClick();
+                else if (c == cancelButton) cancelButton.doClick();
+                else move(order, 1);
             }
-        };
+        });
     }
 
-    private void addRow(JPanel p, GridBagConstraints g,
-                        String l1, JComponent f1,
-                        String l2, JComponent f2) {
-
-        g.gridx = 1; p.add(f1, g);
-        g.gridx = 0; p.add(new JLabel(l1), g);
-
-        if (l2 != null && f2 != null) {
-            g.gridx = 3; p.add(f2, g);
-            g.gridx = 2; p.add(new JLabel(l2), g);
-        }
+    private void move(List<Component> order, int direction) {
+        Component current = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
+        int index = order.indexOf(current);
+        if (index < 0) index = 0;
+        int next = Math.max(0, Math.min(order.size() - 1, index + direction));
+        order.get(next).requestFocusInWindow();
     }
 
-    private double parseDouble(String s) {
-        if (s == null || s.trim().isEmpty()) return 0.0;
-        return Double.parseDouble(s.trim());
-    }
-
-    // ================== API ==================
-
-    public boolean isOk() {
-        return ok;
-    }
+    public boolean isOk() { return ok; }
 
     public AccountEntry getEntry() {
-        return new AccountEntry(
-                descF.getText().trim(),
-                parseDouble(debitF.getText()),
-                parseDouble(creditF.getText()),
-                parseDouble(qtyF.getText()),
-                unitF.getText().trim(),
-                parseDouble(unitPriceF.getText())
-        );
+        AccountEntry entry = new AccountEntry();
+        entry.setMaterial(materialField.getText().trim());
+        entry.setQuantity1(number(quantity1Field));
+        entry.setUnit(unitField.getText().trim());
+        entry.setPrice(number(priceField));
+        entry.setQuantity2(number(quantity2Field));
+        entry.calculateTotal();
+        return entry;
     }
 }

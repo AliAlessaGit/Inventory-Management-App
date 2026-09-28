@@ -6,47 +6,106 @@ import java.util.List;
 
 public class Account implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     private String name;
 
-    // حركات الحساب (AccountInvoice) — ليست Invoice
-    private final List<AccountInvoice> AccountInvoices = new ArrayList<>();
+    private final List<AccountInvoice>
+            accountInvoices =
+            new ArrayList<>();
 
     public Account(String name) {
-        this.name = name;
+        setName(name);
     }
-
-    /* ===== بيانات الحساب ===== */
 
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
-        this.name = name;
+
+        if (
+                name == null
+                        || name.trim().isEmpty()
+        ) {
+            throw new IllegalArgumentException(
+                    "اسم الشركة لا يمكن أن يكون فارغاً"
+            );
+        }
+
+        this.name = name.trim();
     }
 
-    /* ===== إدارة AccountInvoices ===== */
+    public List<AccountInvoice>
+    getAccountInvoices() {
 
-    public List<AccountInvoice> getAccountInvoices() {
-        return AccountInvoices;
+        return accountInvoices;
     }
 
-    public void addAccountInvoice(AccountInvoice accountInvoice) {
-        AccountInvoices.add(accountInvoice);
+    public void addAccountInvoice(
+            AccountInvoice accountInvoice
+    ) {
+
+        if (accountInvoice == null) {
+            throw new IllegalArgumentException(
+                    "الفاتورة مطلوبة"
+            );
+        }
+
+        accountInvoices.add(accountInvoice);
     }
 
-    /* ===== الرصيد ===== */
+    public void removeAccountInvoice(
+            AccountInvoice accountInvoice
+    ) {
 
-    public double getBalance() {
-        return AccountInvoices.stream()
-                .mapToDouble(AccountInvoice::getTotal)
+        accountInvoices.remove(
+                accountInvoice
+        );
+    }
+
+    public double getTotalDebit() {
+
+        return accountInvoices.stream()
+                .mapToDouble(
+                        AccountInvoice::getTotalDebit
+                )
                 .sum();
     }
 
+    public double getTotalCredit() {
+
+        return accountInvoices.stream()
+                .mapToDouble(
+                        AccountInvoice::getTotalCredit
+                )
+                .sum();
+    }
+
+    /**
+     * رصيد الشركة:
+     *
+     * المدين - الدائن.
+     */
+    public double getBalance() {
+
+        return getTotalDebit()
+                - getTotalCredit();
+    }
+
     public String getSide() {
-        double bal = getBalance();
-        if (bal > 0) return "دائن";
-        if (bal < 0) return "مدين";
+
+        double balance =
+                getBalance();
+
+        if (balance > 0) {
+            return "مدين";
+        }
+
+        if (balance < 0) {
+            return "دائن";
+        }
+
         return "متزن";
     }
 }

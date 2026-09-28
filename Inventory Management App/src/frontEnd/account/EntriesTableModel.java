@@ -7,9 +7,8 @@ import java.util.List;
 
 public class EntriesTableModel extends AbstractTableModel {
 
-    private final String[] cols = {
-            "مدين", "دائن", "البيان", "الرصيد",
-            "العدد", "الوحدة", "الإفرادي", "الإجمالي"
+    private final String[] columns = {
+            "المادة", "الكمية 1", "الوحدة", "السعر", "الإجمالي", "الكمية 2"
     };
 
     private List<AccountEntry> entries;
@@ -30,44 +29,33 @@ public class EntriesTableModel extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return cols.length;
+        return columns.length;
     }
 
     @Override
-    public String getColumnName(int c) {
-        return cols[c];
+    public String getColumnName(int column) {
+        return columns[column];
     }
 
     @Override
-    public Class<?> getColumnClass(int col) {
-        return switch (col) {
-            case 0, 1, 3, 4, 6, 7 -> Double.class;
+    public Class<?> getColumnClass(int column) {
+        return switch (column) {
+            case 1, 3, 4, 5 -> Double.class;
             default -> String.class;
         };
     }
 
     @Override
-    public Object getValueAt(int r, int c) {
-        AccountEntry e = entries.get(r);
-        return switch (c) {
-            case 0 -> e.getDebit();
-            case 1 -> e.getCredit();
-            case 2 -> e.getDescription();
-            case 3 -> runningBalance(r);
-            case 4 -> e.getQty();
-            case 5 -> e.getUnit();
-            case 6 -> e.getUnitPrice();
-            case 7 -> e.getTotal();
+    public Object getValueAt(int row, int column) {
+        AccountEntry entry = entries.get(row);
+        return switch (column) {
+            case 0 -> entry.getMaterial();
+            case 1 -> entry.getQuantity1();
+            case 2 -> entry.getUnit();
+            case 3 -> entry.getPrice();
+            case 4 -> entry.getTotal();
+            case 5 -> entry.getQuantity2();
             default -> "";
         };
-    }
-
-    /* الرصيد التراكمي داخل الفاتورة */
-    private double runningBalance(int r) {
-        double bal = 0;
-        for (int i = 0; i <= r; i++) {
-            bal += entries.get(i).getCredit() - entries.get(i).getDebit();
-        }
-        return bal;
     }
 }

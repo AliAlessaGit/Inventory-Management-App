@@ -1,5 +1,98 @@
 [
   {
-    "name": "زنوبيا"
+    "name": "زنوبيا",
+    "accountInvoices": [
+      {
+        "number": "FA00002",
+        "date": "2026-09-28",
+        "type": "PURCHASE",
+        "description": "",
+        "amount": 0.0,
+        "entries": [
+          {
+            "material": "مباع",
+            "quantity1": 0.0,
+            "unit": "متر",
+            "price": 0.0,
+            "total": 0.0,
+            "quantity2": 0.0
+          },
+          {
+            "material": "00 يشسلي ارضيات سيراميك 3",
+            "quantity1": 1408.0,
+            "unit": "متر",
+            "price": 0.0,
+            "total": 0.0,
+            "quantity2": 44.0
+          },
+          {
+            "material": "4534 نيو شام جدران سيراميك 3",
+            "quantity1": 59.400000000000006,
+            "unit": "متر",
+            "price": 7.0,
+            "total": 415.80000000000007,
+            "quantity2": 44.0
+          }
+        ],
+        "stockMovements": [
+          {
+            "movementType": "NOT_IN_STOCK",
+            "inventoryKind": "TILE",
+            "inventoryItemId": 0,
+            "material": "مباع",
+            "quantity1": 0.0,
+            "quantity2": 0.0,
+            "price": 0.0,
+            "previousPrice": 0.0,
+            "boxArea": 0.0
+          },
+          {
+            "movementType": "EXISTING_ITEM",
+            "inventoryKind": "TILE",
+            "inventoryItemId": 7,
+            "material": "00 يشسلي ارضيات سيراميك 3",
+            "quantity1": 1408.0,
+            "quantity2": 44.0,
+            "price": 0.0,
+            "previousPrice": 3.0,
+            "boxArea": 32.0
+          },
+          {
+            "movementType": "NEW_ITEM",
+            "inventoryKind": "TILE",
+            "inventoryItemId": 9,
+            "material": "4534 نيو شام جدران سيراميك 3",
+            "quantity1": 59.400000000000006,
+            "quantity2": 44.0,
+            "price": 7.0,
+            "previousPrice": 0.0,
+            "boxArea": 1.35
+          }
+        ]
+      },
+      {
+        "number": "FA00003",
+        "date": "2026-09-28",
+        "type": "PAYMENT",
+        "description": "",
+        "amount": 400.0,
+        "entries": [],
+        "stockMovements": []
+      }
+    ]
+  },
+  {
+    "name": "بلقيس",
+    "accountInvoices": [
+      {
+        "number": "FA00004",
+        "date": "2026-09-28",
+        "type": "RECEIPT",
+        "description": "",
+        "amount": 90.0,
+        "entries": [],
+        "stockMovements": []
+      }
+    ]
   }
 ]
