@@ -137,19 +137,19 @@ public class InvoicePaymentsDialog {
                         pModel.addRow(
                                 new Object[]{
                                         String.format(
-                                                "%,.2f",
+                                                "%.2f",
                                                 p.getAmount()
                                         ),
 
                                         p.getCurrency(),
 
                                         String.format(
-                                                "%,.2f",
+                                                "%.2f",
                                                 p.getDollarAmount()
                                         ),
 
                                         String.format(
-                                                "%,.2f",
+                                                "%.2f",
                                                 p.getExchangeRate()
                                         ),
 

@@ -174,12 +174,24 @@ public class TileItem extends InventoryItem implements Serializable {
         this.warehouseNumber = warehouseNumber;
     }
 
+    private String normalizeGrade(String value) {
+        String normalized = value == null ? "" : value.trim();
+        return switch (normalized) {
+            case "1" -> "اول";
+            case "2" -> "ثاني";
+            case "3" -> "ثالث";
+            case "4" -> "رابع";
+            case "5" -> "خامس";
+            default -> normalized;
+        };
+    }
+
     public String getGrade() { return grade; }
     public void setGrade(String grade) {
         if (grade == null || grade.trim().isEmpty()) {
             throw new IllegalArgumentException("النخب لا يمكن أن يكون فارغاً");
         }
-        this.grade = grade.trim();
+        this.grade = normalizeGrade(grade);
     }
 
     public Location getLocation() { return location; }

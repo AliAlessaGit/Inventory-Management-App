@@ -126,6 +126,9 @@ public class SanitaryService {
 
             if (item != null) {
 
+                // توحيد النخب القديمة/المستوردة: 1..5 تصبح أول..خامس.
+                item.setGrade(item.getGrade());
+
                 InventoryItem.bumpIdCounterIfNeeded(
                         item.getIdNumber()
                 );

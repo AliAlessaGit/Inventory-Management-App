@@ -56,9 +56,41 @@ public class AccountInvoicesTableModel extends AbstractTableModel {
             case 2 -> invoice.getType().getArabicName();
             case 3 -> invoice.getTotalDebit();
             case 4 -> invoice.getTotalCredit();
-            case 5 -> invoice.getTotal();
+            case 5 -> getRunningBalance(row);
             case 6 -> invoice.getDescription();
             default -> "";
         };
+    }
+
+    /**
+     * الرصيد التراكمي حتى هذه الفاتورة.
+     * الفاتورة الحالية تضيف حركتها إلى رصيد الفواتير السابقة.
+     */
+    private double getRunningBalance(int row) {
+
+        double balance = 0.0;
+
+        if (invoices == null) {
+            return 0.0;
+        }
+
+        for (int i = 0; i <= row && i < invoices.size(); i++) {
+
+            AccountInvoice invoice =
+                    invoices.get(i);
+
+            if (invoice != null) {
+
+                balance += invoice.getTotal();
+
+                // تقريب الرصيد بعد كل فاتورة إلى منزلتين
+                balance =
+                        Math.round(
+                                balance * 100.0
+                        ) / 100.0;
+            }
+        }
+
+        return balance;
     }
 }

@@ -220,6 +220,8 @@ public class AccountInvoiceService {
     public AccountEntry addPurchaseExistingTile(
             AccountInvoice invoice,
             TileItem item,
+            String editedCode,
+            String editedName,
             double boxes,
             double price
     ) {
@@ -248,12 +250,21 @@ public class AccountInvoiceService {
         double previousPrice =
                 item.getPrice();
 
+        /*
+         * إذا أدخل المستخدم رمزًا أو اسمًا جديدًا يتم تعديلهما
+         * في نفس صنف المستودع. إذا ترك الحقل فارغًا يبقى القديم.
+         */
+        if (editedCode != null && !editedCode.trim().isEmpty()) {
+            item.setCode(editedCode);
+        }
+
+        if (editedName != null && !editedName.trim().isEmpty()) {
+            item.setName(editedName);
+        }
+
         double quantity1 =
                 item.getBoxArea()
                         * boxes;
-
-        String material =
-                buildTileMaterial(item);
 
         /*
          * زيادة المخزون.
@@ -267,6 +278,12 @@ public class AccountInvoiceService {
          * تحديث السعر.
          */
         item.setPrice(price);
+
+        /*
+         * بعد تعديل الرمز/الاسم يجب بناء المادة من القيم الجديدة.
+         */
+        String material =
+                buildTileMaterial(item);
 
         tileService.save();
 
@@ -588,6 +605,152 @@ public class AccountInvoiceService {
 
         accountsManager.saveQuietly();
     }
+    public void deleteEntry(
+            AccountInvoice invoice,
+            int entryIndex
+    ) {
+
+        if (invoice == null) {
+            throw new IllegalArgumentException(
+                    "الفاتورة مطلوبة"
+            );
+        }
+
+        if (
+                entryIndex < 0
+                        || entryIndex >= invoice
+                        .getEntries()
+                        .size()
+        ) {
+
+            throw new IllegalArgumentException(
+                    "البند المحدد غير موجود"
+            );
+        }
+
+        /*
+         * في فاتورة الشراء:
+         * كل بند مرتبط بحركة مخزون بنفس الفهرس.
+         */
+        if (invoice.isPurchase()) {
+
+            if (
+                    entryIndex
+                            < invoice
+                            .getStockMovements()
+                            .size()
+            ) {
+
+                rollbackPurchaseStockMovement(
+                        invoice
+                                .getStockMovements()
+                                .get(entryIndex)
+                );
+
+                invoice
+                        .getStockMovements()
+                        .remove(entryIndex);
+            }
+        }
+
+        invoice
+                .getEntries()
+                .remove(entryIndex);
+
+        accountsManager.saveQuietly();
+    }private void rollbackPurchaseStockMovement(
+            AccountStockMovement movement
+    ) {
+
+        if (
+                movement == null
+                        || movement.getMovementType()
+                        == AccountStockMovementType.NOT_IN_STOCK
+        ) {
+            return;
+        }
+
+        if (
+                movement.getInventoryKind()
+                        == AccountInventoryKind.TILE
+        ) {
+
+            TileItem item =
+                    tileService.findById(
+                            movement.getInventoryItemId()
+                    );
+
+            if (item == null) {
+                return;
+            }
+
+            if (
+                    movement.getMovementType()
+                            == AccountStockMovementType.NEW_ITEM
+            ) {
+
+                tileService.remove(item);
+                tileService.save();
+
+                return;
+            }
+
+            item.setBoxes(
+                    Math.max(
+                            0,
+                            item.getBoxes()
+                                    - movement.getQuantity2()
+                    )
+            );
+
+            item.setPrice(
+                    movement.getPreviousPrice()
+            );
+
+            tileService.save();
+
+            return;
+        }
+
+        SanitaryItem item =
+                sanitaryService.findById(
+                        movement.getInventoryItemId()
+                );
+
+        if (item == null) {
+            return;
+        }
+
+        if (
+                movement.getMovementType()
+                        == AccountStockMovementType.NEW_ITEM
+        ) {
+
+            sanitaryService.remove(item);
+            sanitaryService.save();
+
+            return;
+        }
+
+        int quantity =
+                (int) Math.round(
+                        movement.getQuantity2()
+                );
+
+        item.setQuantity(
+                Math.max(
+                        0,
+                        item.getQuantity()
+                                - quantity
+                )
+        );
+
+        item.setPrice(
+                movement.getPreviousPrice()
+        );
+
+        sanitaryService.save();
+    }
 
     /**
      * التراجع عن حركات فاتورة الشراء.
@@ -733,6 +896,8 @@ public class AccountInvoiceService {
             return "";
         }
 
+        String grade = normalizeGrade(item.getGrade());
+
         return safe(item.getCode())
                 + " "
                 + safe(item.getName())
@@ -749,7 +914,7 @@ public class AccountInvoiceService {
                         : item.getMaterialType().name()
         )
                 + " "
-                + safe(item.getGrade());
+                + grade;
     }
 
     /**
@@ -767,7 +932,19 @@ public class AccountInvoiceService {
 
         return safe(item.getName())
                 + " "
-                + safe(item.getGrade());
+                + normalizeGrade(item.getGrade());
+    }
+
+    private String normalizeGrade(String value) {
+        String normalized = safe(value);
+        return switch (normalized) {
+            case "1" -> "اول";
+            case "2" -> "ثاني";
+            case "3" -> "ثالث";
+            case "4" -> "رابع";
+            case "5" -> "خامس";
+            default -> normalized;
+        };
     }
 
     private String safe(String value) {

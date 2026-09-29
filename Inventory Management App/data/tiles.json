@@ -1,7 +1,7 @@
 [
   {
     "code": "00",
-    "boxes": 7.85,
+    "boxes": 73.85,
     "boxArea": 1.58,
     "materialType": "سيراميك",
     "subType": "جدران",
@@ -17,11 +17,11 @@
     "location": "رقم_1",
     "idNumber": 4,
     "name": "راميتا",
-    "price": 7.0
+    "price": 4.0
   },
   {
     "code": "00",
-    "boxes": 65.1,
+    "boxes": 21.099999999999994,
     "boxArea": 32.0,
     "materialType": "سيراميك",
     "subType": "ارضيات",
@@ -37,26 +37,6 @@
     "location": "رقم_1",
     "idNumber": 7,
     "name": "يشسلي",
-    "price": 0.0
-  },
-  {
-    "code": "4534",
-    "boxes": 44.0,
-    "boxArea": 1.35,
-    "materialType": "سيراميك",
-    "subType": "جدران",
-    "warehouseNumber": 1,
-    "grade": "3",
-    "warehouse": {
-      "id": 1,
-      "name": "ابو عمر",
-      "type": "OWNED",
-      "ownerName": "",
-      "ownerContact": ""
-    },
-    "location": "رقم_3",
-    "idNumber": 9,
-    "name": "نيو شام",
-    "price": 7.0
+    "price": 3.0
   }
 ]

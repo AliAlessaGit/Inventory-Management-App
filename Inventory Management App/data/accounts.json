@@ -10,14 +10,6 @@
         "amount": 0.0,
         "entries": [
           {
-            "material": "مباع",
-            "quantity1": 0.0,
-            "unit": "متر",
-            "price": 0.0,
-            "total": 0.0,
-            "quantity2": 0.0
-          },
-          {
             "material": "00 يشسلي ارضيات سيراميك 3",
             "quantity1": 1408.0,
             "unit": "متر",
@@ -26,26 +18,47 @@
             "quantity2": 44.0
           },
           {
-            "material": "4534 نيو شام جدران سيراميك 3",
-            "quantity1": 59.400000000000006,
+            "material": "روشان",
+            "quantity1": 12.5,
             "unit": "متر",
-            "price": 7.0,
-            "total": 415.80000000000007,
-            "quantity2": 44.0
+            "price": 6.0,
+            "total": 75.0,
+            "quantity2": 5.0
+          },
+          {
+            "material": "00 راميتا جدران سيراميك 1",
+            "quantity1": 104.28,
+            "unit": "متر",
+            "price": 4.0,
+            "total": 417.12,
+            "quantity2": 66.0
+          },
+          {
+            "material": "زوايا",
+            "quantity1": 55.0,
+            "unit": "قطعة",
+            "price": 3.0,
+            "total": 165.0,
+            "quantity2": 55.0
+          },
+          {
+            "material": "جوري 1",
+            "quantity1": 11.0,
+            "unit": "قطعة",
+            "price": 18.0,
+            "total": 198.0,
+            "quantity2": 11.0
+          },
+          {
+            "material": "98324 نتيال",
+            "quantity1": 90.0,
+            "unit": "متر",
+            "price": 5.0,
+            "total": 450.0,
+            "quantity2": 45.0
           }
         ],
         "stockMovements": [
-          {
-            "movementType": "NOT_IN_STOCK",
-            "inventoryKind": "TILE",
-            "inventoryItemId": 0,
-            "material": "مباع",
-            "quantity1": 0.0,
-            "quantity2": 0.0,
-            "price": 0.0,
-            "previousPrice": 0.0,
-            "boxArea": 0.0
-          },
           {
             "movementType": "EXISTING_ITEM",
             "inventoryKind": "TILE",
@@ -58,15 +71,59 @@
             "boxArea": 32.0
           },
           {
-            "movementType": "NEW_ITEM",
+            "movementType": "NOT_IN_STOCK",
             "inventoryKind": "TILE",
-            "inventoryItemId": 9,
-            "material": "4534 نيو شام جدران سيراميك 3",
-            "quantity1": 59.400000000000006,
-            "quantity2": 44.0,
-            "price": 7.0,
+            "inventoryItemId": 0,
+            "material": "روشان",
+            "quantity1": 12.5,
+            "quantity2": 5.0,
+            "price": 6.0,
             "previousPrice": 0.0,
-            "boxArea": 1.35
+            "boxArea": 0.0
+          },
+          {
+            "movementType": "EXISTING_ITEM",
+            "inventoryKind": "TILE",
+            "inventoryItemId": 4,
+            "material": "00 راميتا جدران سيراميك 1",
+            "quantity1": 104.28,
+            "quantity2": 66.0,
+            "price": 4.0,
+            "previousPrice": 20.0,
+            "boxArea": 1.58
+          },
+          {
+            "movementType": "NOT_IN_STOCK",
+            "inventoryKind": "SANITARY",
+            "inventoryItemId": 0,
+            "material": "زوايا",
+            "quantity1": 55.0,
+            "quantity2": 55.0,
+            "price": 3.0,
+            "previousPrice": 0.0,
+            "boxArea": 0.0
+          },
+          {
+            "movementType": "EXISTING_ITEM",
+            "inventoryKind": "SANITARY",
+            "inventoryItemId": 2,
+            "material": "جوري 1",
+            "quantity1": 11.0,
+            "quantity2": 11.0,
+            "price": 18.0,
+            "previousPrice": 18.0,
+            "boxArea": 0.0
+          },
+          {
+            "movementType": "NOT_IN_STOCK",
+            "inventoryKind": "TILE",
+            "inventoryItemId": 0,
+            "material": "98324 نتيال",
+            "quantity1": 90.0,
+            "quantity2": 45.0,
+            "price": 5.0,
+            "previousPrice": 0.0,
+            "boxArea": 0.0
           }
         ]
       },
@@ -76,6 +133,72 @@
         "type": "PAYMENT",
         "description": "",
         "amount": 400.0,
+        "entries": [],
+        "stockMovements": []
+      },
+      {
+        "number": "FA00011",
+        "date": "2026-09-28",
+        "type": "PURCHASE",
+        "description": "",
+        "amount": 0.0,
+        "entries": [
+          {
+            "material": "لاصق ايطالي اول",
+            "quantity1": 40.0,
+            "unit": "قطعة",
+            "price": 2.8,
+            "total": 112.0,
+            "quantity2": 40.0
+          }
+        ],
+        "stockMovements": [
+          {
+            "movementType": "NEW_ITEM",
+            "inventoryKind": "SANITARY",
+            "inventoryItemId": 8,
+            "material": "لاصق ايطالي اول",
+            "quantity1": 40.0,
+            "quantity2": 40.0,
+            "price": 2.8,
+            "previousPrice": 0.0,
+            "boxArea": 0.0
+          }
+        ]
+      },
+      {
+        "number": "FA00012",
+        "date": "2026-09-28",
+        "type": "PAYMENT",
+        "description": "",
+        "amount": 120.6,
+        "entries": [],
+        "stockMovements": []
+      },
+      {
+        "number": "FA00016",
+        "date": "2026-09-29",
+        "type": "RECEIPT",
+        "description": "",
+        "amount": 70.0,
+        "entries": [],
+        "stockMovements": []
+      },
+      {
+        "number": "FA00017",
+        "date": "2026-09-29",
+        "type": "SALE",
+        "description": "",
+        "amount": 0.0,
+        "entries": [],
+        "stockMovements": []
+      },
+      {
+        "number": "FA00018",
+        "date": "2026-09-29",
+        "type": "SALE",
+        "description": "",
+        "amount": 0.0,
         "entries": [],
         "stockMovements": []
       }
@@ -90,6 +213,114 @@
         "type": "RECEIPT",
         "description": "",
         "amount": 90.0,
+        "entries": [],
+        "stockMovements": []
+      },
+      {
+        "number": "FA00005",
+        "date": "2026-09-28",
+        "type": "SALE",
+        "description": "",
+        "amount": 0.0,
+        "entries": [],
+        "stockMovements": []
+      },
+      {
+        "number": "FA00006",
+        "date": "2026-09-28",
+        "type": "SALE",
+        "description": "",
+        "amount": 0.0,
+        "entries": [],
+        "stockMovements": []
+      },
+      {
+        "number": "FA00007",
+        "date": "2026-09-28",
+        "type": "PAYMENT",
+        "description": "",
+        "amount": 990.0,
+        "entries": [],
+        "stockMovements": []
+      },
+      {
+        "number": "FA00009",
+        "date": "2026-09-28",
+        "type": "PURCHASE",
+        "description": "",
+        "amount": 0.0,
+        "entries": [
+          {
+            "material": "00 راميتا جدران سيراميك 1",
+            "quantity1": 0.0,
+            "unit": "متر",
+            "price": 20.0,
+            "total": 0.0,
+            "quantity2": 0.0
+          },
+          {
+            "material": "جوري5 1",
+            "quantity1": 40.0,
+            "unit": "قطعة",
+            "price": 18.0,
+            "total": 720.0,
+            "quantity2": 40.0
+          }
+        ],
+        "stockMovements": [
+          {
+            "movementType": "EXISTING_ITEM",
+            "inventoryKind": "TILE",
+            "inventoryItemId": 4,
+            "material": "00 راميتا جدران سيراميك 1",
+            "quantity1": 0.0,
+            "quantity2": 0.0,
+            "price": 20.0,
+            "previousPrice": 7.0,
+            "boxArea": 1.58
+          },
+          {
+            "movementType": "EXISTING_ITEM",
+            "inventoryKind": "SANITARY",
+            "inventoryItemId": 2,
+            "material": "جوري5 1",
+            "quantity1": 40.0,
+            "quantity2": 40.0,
+            "price": 18.0,
+            "previousPrice": 8.0,
+            "boxArea": 0.0
+          }
+        ]
+      },
+      {
+        "number": "FA00010",
+        "date": "2026-09-28",
+        "type": "RECEIPT",
+        "description": "يبشليل",
+        "amount": 345.0,
+        "entries": [],
+        "stockMovements": []
+      },
+      {
+        "number": "FA00015",
+        "date": "2026-09-28",
+        "type": "PAYMENT",
+        "description": "",
+        "amount": 4.0,
+        "entries": [],
+        "stockMovements": []
+      }
+    ]
+  },
+  {
+    "name": "الساكت",
+    "accountInvoices": [
+      {
+        "number": "FA00014",
+        "date": "2026-09-28",
+        "type": "SALE",
+        "description": "",
+        "amount": 0.0,
         "entries": [],
         "stockMovements": []
       }

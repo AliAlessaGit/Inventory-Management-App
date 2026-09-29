@@ -175,18 +175,9 @@ public class AccountInvoice implements Serializable {
      * بالإضافة إلى التفاصيل التي كتبها المستخدم.
      */
     public String getDescription() {
-
-        if (
-                description == null
-                        || description.isEmpty()
-        ) {
-            return "رقم الفاتورة: " + number;
-        }
-
-        return "رقم الفاتورة: "
-                + number
-                + " - "
-                + description;
+        return description == null
+                ? ""
+                : description;
     }
 
     /**

@@ -5,18 +5,56 @@ import backEnd.account.Account;
 import javax.swing.table.AbstractTableModel;
 import java.util.List;
 
-public class AccountsTableModel extends AbstractTableModel {
-    private final List<Account> accounts;
-    private final String[] cols = {"الحسابات"};
+public class AccountsTableModel
+        extends AbstractTableModel {
 
-    public AccountsTableModel(List<Account> accounts) {
+    private final List<Account> accounts;
+
+    private final String[] columns = {
+            "اسم الحساب"
+    };
+
+    public AccountsTableModel(
+            List<Account> accounts
+    ) {
         this.accounts = accounts;
     }
 
-    @Override public int getRowCount() { return accounts.size(); }
-    @Override public int getColumnCount() { return 1; }
-    @Override public String getColumnName(int c) { return cols[c]; }
-    @Override public Object getValueAt(int row, int col) {
-        return accounts.get(row).getName();
+    @Override
+    public int getRowCount() {
+
+        return accounts == null
+                ? 0
+                : accounts.size();
+    }
+
+    @Override
+    public int getColumnCount() {
+        return columns.length;
+    }
+
+    @Override
+    public String getColumnName(
+            int column
+    ) {
+        return columns[column];
+    }
+
+    @Override
+    public Class<?> getColumnClass(
+            int column
+    ) {
+        return String.class;
+    }
+
+    @Override
+    public Object getValueAt(
+            int row,
+            int column
+    ) {
+
+        return accounts
+                .get(row)
+                .getName();
     }
 }
