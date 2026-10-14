@@ -141,6 +141,108 @@ public class AccountInvoiceService {
     }
 
     /**
+     * بيع بلاط من صنف موجود في المستودع.
+     * لا يتم تغيير السعر الأساسي للصنف عند البيع.
+     */
+    public AccountEntry addSaleExistingTile(
+            AccountInvoice invoice, TileItem item, double boxes, double price) {
+        requireType(invoice, AccountInvoiceType.SALE);
+        if (item == null) throw new IllegalArgumentException("صنف البلاط مطلوب");
+        validatePositive(boxes, "عدد الصناديق");
+        validatePositiveOrZero(price, "السعر");
+        if (boxes > item.getBoxes()) {
+            throw new IllegalArgumentException("الكمية المطلوبة أكبر من الكمية المتوفرة في المستودع");
+        }
+        alignSaleMovements(invoice);
+        double area = item.getBoxArea();
+        String material = buildTileMaterial(item);
+        AccountEntry entry = AccountEntryFactory.createTileEntry(
+                material, area, boxes, price);
+        item.setBoxes(item.getBoxes() - boxes);
+        tileService.save();
+        invoice.addEntry(entry);
+        invoice.addStockMovement(new AccountStockMovement(
+                AccountStockMovementType.EXISTING_ITEM, AccountInventoryKind.TILE,
+                item.getIdNumber(), material, area * boxes, boxes, price,
+                item.getPrice(), area));
+        accountsManager.saveQuietly();
+        return entry;
+    }
+
+    /** بيع أداة صحية من صنف موجود في المستودع. */
+    public AccountEntry addSaleExistingSanitary(
+            AccountInvoice invoice, SanitaryItem item, double quantity, double price) {
+        requireType(invoice, AccountInvoiceType.SALE);
+        if (item == null) throw new IllegalArgumentException("الصنف الصحي مطلوب");
+        validateWholeQuantity(quantity);
+        validatePositive(quantity, "الكمية");
+        validatePositiveOrZero(price, "السعر");
+        if (quantity > item.getQuantity()) {
+            throw new IllegalArgumentException("الكمية المطلوبة أكبر من الكمية المتوفرة في المستودع");
+        }
+        alignSaleMovements(invoice);
+        String material = buildSanitaryMaterial(item);
+        AccountEntry entry = AccountEntryFactory.createSanitaryEntry(
+                material, quantity, "قطعة", price);
+        item.setQuantity(item.getQuantity() - (int) quantity);
+        sanitaryService.save();
+        invoice.addEntry(entry);
+        invoice.addStockMovement(new AccountStockMovement(
+                AccountStockMovementType.EXISTING_ITEM, AccountInventoryKind.SANITARY,
+                item.getIdNumber(), material, quantity, quantity, price,
+                item.getPrice(), 0.0));
+        accountsManager.saveQuietly();
+        return entry;
+    }
+
+    /** بيع مادة من خارج المستودع؛ لا تُنشأ حركة مخزون. */
+    public AccountEntry addSaleNotInStock(
+            AccountInvoice invoice, AccountInventoryKind kind, String material,
+            double quantity1, String unit, double price, double quantity2) {
+        requireType(invoice, AccountInvoiceType.SALE);
+        requireKind(kind);
+        validatePositive(quantity1, "الكمية");
+        validatePositiveOrZero(price, "السعر");
+        alignSaleMovements(invoice);
+        AccountEntry entry = new AccountEntry();
+        entry.setMaterial(material);
+        if (kind == AccountInventoryKind.TILE) {
+            validatePositive(quantity2, "عدد الصناديق");
+            entry.setUnit("متر");
+            entry.setQuantity1(quantity1);
+            entry.setQuantity2(quantity2);
+            entry.setPrice(price);
+            entry.calculateTotal();
+        } else {
+            entry.calculateSanitary(quantity1, unit, price);
+        }
+        invoice.addEntry(entry);
+        invoice.addStockMovement(new AccountStockMovement(
+                AccountStockMovementType.NOT_IN_STOCK, kind, 0L,
+                entry.getMaterial(), entry.getQuantity1(), entry.getQuantity2(),
+                entry.getPrice(), 0.0, 0.0));
+        accountsManager.saveQuietly();
+        return entry;
+    }
+
+    /*
+     * تحفظ السندات القديمة دون حركات مخزون. قبل إضافة حركة جديدة نضيف
+     * حركات محايدة للبنود القديمة حتى تبقى فهارس البنود والحركات متطابقة.
+     */
+    private void alignSaleMovements(AccountInvoice invoice) {
+        while (invoice.getStockMovements().size() < invoice.getEntries().size()) {
+            AccountEntry old = invoice.getEntries().get(invoice.getStockMovements().size());
+            invoice.addStockMovement(new AccountStockMovement(
+                    AccountStockMovementType.NOT_IN_STOCK,
+                    old != null && old.isTile() ? AccountInventoryKind.TILE : AccountInventoryKind.SANITARY,
+                    0L, old == null ? "" : old.getMaterial(),
+                    old == null ? 0 : old.getQuantity1(),
+                    old == null ? 0 : old.getQuantity2(),
+                    old == null ? 0 : old.getPrice(), 0.0, 0.0));
+        }
+    }
+
+    /**
      * شراء لا يضاف إلى المستودع.
      */
     public AccountEntry addPurchaseNotInStock(
@@ -594,9 +696,9 @@ public class AccountInvoiceService {
         }
 
         if (invoice.isPurchase()) {
-            rollbackPurchaseStock(
-                    invoice
-            );
+            rollbackPurchaseStock(invoice);
+        } else if (invoice.isSale()) {
+            rollbackSaleStock(invoice);
         }
 
         account.removeAccountInvoice(
@@ -633,24 +735,14 @@ public class AccountInvoiceService {
          * كل بند مرتبط بحركة مخزون بنفس الفهرس.
          */
         if (invoice.isPurchase()) {
-
-            if (
-                    entryIndex
-                            < invoice
-                            .getStockMovements()
-                            .size()
-            ) {
-
-                rollbackPurchaseStockMovement(
-                        invoice
-                                .getStockMovements()
-                                .get(entryIndex)
-                );
-
-                invoice
-                        .getStockMovements()
-                        .remove(entryIndex);
+            if (entryIndex < invoice.getStockMovements().size()) {
+                rollbackPurchaseStockMovement(invoice.getStockMovements().get(entryIndex));
+                invoice.getStockMovements().remove(entryIndex);
             }
+        } else if (invoice.isSale()
+                && invoice.getStockMovements().size() == invoice.getEntries().size()) {
+            rollbackSaleStockMovement(invoice.getStockMovements().get(entryIndex));
+            invoice.getStockMovements().remove(entryIndex);
         }
 
         invoice
@@ -750,6 +842,34 @@ public class AccountInvoiceService {
         );
 
         sanitaryService.save();
+    }
+
+    /** عكس حركات المخزون الناتجة عن البيع. */
+    private void rollbackSaleStockMovement(AccountStockMovement movement) {
+        if (movement == null
+                || movement.getMovementType() == AccountStockMovementType.NOT_IN_STOCK) return;
+
+        if (movement.getInventoryKind() == AccountInventoryKind.TILE) {
+            TileItem item = tileService.findById(movement.getInventoryItemId());
+            if (item != null) {
+                item.setBoxes(item.getBoxes() + movement.getQuantity2());
+                tileService.save();
+            }
+        } else {
+            SanitaryItem item = sanitaryService.findById(movement.getInventoryItemId());
+            if (item != null) {
+                item.setQuantity(item.getQuantity() + (int) Math.round(movement.getQuantity2()));
+                sanitaryService.save();
+            }
+        }
+    }
+
+    private void rollbackSaleStock(AccountInvoice invoice) {
+        if (invoice == null || !invoice.isSale()
+                || invoice.getStockMovements().size() != invoice.getEntries().size()) return;
+        for (AccountStockMovement movement : invoice.getStockMovements()) {
+            rollbackSaleStockMovement(movement);
+        }
     }
 
     /**

@@ -4,6 +4,7 @@ import backEnd.account.*;
 import backEnd.sanitary.SanitaryService;
 import backEnd.tile.TileService;
 import backEnd.warehouse.WarehouseManager;
+import frontEnd.account.sale.SaleEntryDialog;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -76,6 +77,9 @@ public class AccountTabPanel extends JPanel {
 
     private final JButton addDescriptionButton =
             new JButton("إضافة بيان");
+    private final JButton exportPdfButton =
+            new JButton("تصدير PDF");
+
     /*
      * أزرار الفاتورة.
      */
@@ -466,6 +470,9 @@ public class AccountTabPanel extends JPanel {
         addDescriptionButton.addActionListener(
                 e -> addDescription()
         );
+        exportPdfButton.addActionListener(
+                e -> exportSelectedInvoicePdf()
+        );
 
         return panel;
     }
@@ -532,6 +539,9 @@ public class AccountTabPanel extends JPanel {
         styleActionButton(
                 addDescriptionButton
         );
+        styleActionButton(
+                exportPdfButton
+        );
 
         buttons.add(
                 newDocumentButton
@@ -544,9 +554,129 @@ public class AccountTabPanel extends JPanel {
         buttons.add(
                 addDescriptionButton
         );
-
+        buttons.add(
+                exportPdfButton
+        );
 
         return buttons;
+    }
+    private void exportSelectedInvoicePdf() {
+
+        int viewRow =
+                invoicesTable.getSelectedRow();
+
+        if (viewRow < 0) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "يرجى تحديد السند أولاً",
+                    "تصدير PDF",
+                    JOptionPane.WARNING_MESSAGE
+            );
+
+            return;
+        }
+
+        int modelRow =
+                invoicesTable.convertRowIndexToModel(
+                        viewRow
+                );
+
+        if (
+                modelRow < 0
+                        || modelRow >= account
+                        .getAccountInvoices()
+                        .size()
+        ) {
+            return;
+        }
+
+        AccountInvoice invoice =
+                account
+                        .getAccountInvoices()
+                        .get(modelRow);
+
+        JFileChooser chooser =
+                new JFileChooser();
+
+        chooser.setDialogTitle(
+                "حفظ سند PDF"
+        );
+
+        String defaultName =
+                "Account-"
+                        + invoice.getNumber()
+                        + ".pdf";
+
+        chooser.setSelectedFile(
+                new java.io.File(
+                        defaultName
+                )
+        );
+
+        int result =
+                chooser.showSaveDialog(this);
+
+        if (
+                result
+                        != JFileChooser.APPROVE_OPTION
+        ) {
+            return;
+        }
+
+        java.io.File file =
+                chooser.getSelectedFile();
+
+        /*
+         * إضافة .pdf تلقائيًا إذا لم يكتبها المستخدم.
+         */
+        if (
+                !file.getName()
+                        .toLowerCase()
+                        .endsWith(".pdf")
+        ) {
+
+            file =
+                    new java.io.File(
+                            file.getAbsolutePath()
+                                    + ".pdf"
+                    );
+        }
+
+        try {
+
+            backEnd.account.pdf
+                    .AccountInvoicePdfExporter
+                    .export(
+                            account,
+                            invoice,
+                            file
+                    );
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "تم تصدير السند بنجاح:\n"
+                            + file.getAbsolutePath(),
+                    "تصدير PDF",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+
+        } catch (Exception ex) {
+
+            ex.printStackTrace();
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "تعذر تصدير السند:\n"
+                            + (
+                            ex.getMessage() == null
+                                    ? "خطأ غير معروف"
+                                    : ex.getMessage()
+                    ),
+                    "خطأ",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
     }
 
     /*
@@ -982,30 +1112,24 @@ public class AccountTabPanel extends JPanel {
                     currentInvoice.getType()
                             == AccountInvoiceType.SALE
             ) {
-
-                EntryDialog dialog =
-                        new EntryDialog(
-                                SwingUtilities
-                                        .getWindowAncestor(this)
-                        );
-
+                SaleEntryDialog dialog = new SaleEntryDialog(
+                        SwingUtilities.getWindowAncestor(this),
+                        tileService, sanitaryService, warehouseManager);
                 dialog.setVisible(true);
+                if (!dialog.isOk()) return;
 
-                if (!dialog.isOk()) {
-                    return;
+                SaleEntryDialog.SaleData d = dialog.getData();
+                if (d.movement == AccountStockMovementType.NOT_IN_STOCK) {
+                    invoiceService.addSaleNotInStock(
+                            currentInvoice, d.kind, d.material,
+                            d.quantity1, d.unit, d.price, d.quantity2);
+                } else if (d.kind == AccountInventoryKind.TILE) {
+                    invoiceService.addSaleExistingTile(
+                            currentInvoice, d.tileItem, d.quantity2, d.price);
+                } else {
+                    invoiceService.addSaleExistingSanitary(
+                            currentInvoice, d.sanitaryItem, d.quantity1, d.price);
                 }
-
-                AccountEntry entry =
-                        dialog.getEntry();
-
-                invoiceService.addSaleEntry(
-                        currentInvoice,
-                        entry.getMaterial(),
-                        entry.getQuantity1(),
-                        entry.getUnit(),
-                        entry.getPrice(),
-                        entry.getQuantity2()
-                );
             }
 
             refresh();

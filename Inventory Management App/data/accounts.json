@@ -3,131 +3,6 @@
     "name": "زنوبيا",
     "accountInvoices": [
       {
-        "number": "FA00002",
-        "date": "2026-09-28",
-        "type": "PURCHASE",
-        "description": "",
-        "amount": 0.0,
-        "entries": [
-          {
-            "material": "00 يشسلي ارضيات سيراميك 3",
-            "quantity1": 1408.0,
-            "unit": "متر",
-            "price": 0.0,
-            "total": 0.0,
-            "quantity2": 44.0
-          },
-          {
-            "material": "روشان",
-            "quantity1": 12.5,
-            "unit": "متر",
-            "price": 6.0,
-            "total": 75.0,
-            "quantity2": 5.0
-          },
-          {
-            "material": "00 راميتا جدران سيراميك 1",
-            "quantity1": 104.28,
-            "unit": "متر",
-            "price": 4.0,
-            "total": 417.12,
-            "quantity2": 66.0
-          },
-          {
-            "material": "زوايا",
-            "quantity1": 55.0,
-            "unit": "قطعة",
-            "price": 3.0,
-            "total": 165.0,
-            "quantity2": 55.0
-          },
-          {
-            "material": "جوري 1",
-            "quantity1": 11.0,
-            "unit": "قطعة",
-            "price": 18.0,
-            "total": 198.0,
-            "quantity2": 11.0
-          },
-          {
-            "material": "98324 نتيال",
-            "quantity1": 90.0,
-            "unit": "متر",
-            "price": 5.0,
-            "total": 450.0,
-            "quantity2": 45.0
-          }
-        ],
-        "stockMovements": [
-          {
-            "movementType": "EXISTING_ITEM",
-            "inventoryKind": "TILE",
-            "inventoryItemId": 7,
-            "material": "00 يشسلي ارضيات سيراميك 3",
-            "quantity1": 1408.0,
-            "quantity2": 44.0,
-            "price": 0.0,
-            "previousPrice": 3.0,
-            "boxArea": 32.0
-          },
-          {
-            "movementType": "NOT_IN_STOCK",
-            "inventoryKind": "TILE",
-            "inventoryItemId": 0,
-            "material": "روشان",
-            "quantity1": 12.5,
-            "quantity2": 5.0,
-            "price": 6.0,
-            "previousPrice": 0.0,
-            "boxArea": 0.0
-          },
-          {
-            "movementType": "EXISTING_ITEM",
-            "inventoryKind": "TILE",
-            "inventoryItemId": 4,
-            "material": "00 راميتا جدران سيراميك 1",
-            "quantity1": 104.28,
-            "quantity2": 66.0,
-            "price": 4.0,
-            "previousPrice": 20.0,
-            "boxArea": 1.58
-          },
-          {
-            "movementType": "NOT_IN_STOCK",
-            "inventoryKind": "SANITARY",
-            "inventoryItemId": 0,
-            "material": "زوايا",
-            "quantity1": 55.0,
-            "quantity2": 55.0,
-            "price": 3.0,
-            "previousPrice": 0.0,
-            "boxArea": 0.0
-          },
-          {
-            "movementType": "EXISTING_ITEM",
-            "inventoryKind": "SANITARY",
-            "inventoryItemId": 2,
-            "material": "جوري 1",
-            "quantity1": 11.0,
-            "quantity2": 11.0,
-            "price": 18.0,
-            "previousPrice": 18.0,
-            "boxArea": 0.0
-          },
-          {
-            "movementType": "NOT_IN_STOCK",
-            "inventoryKind": "TILE",
-            "inventoryItemId": 0,
-            "material": "98324 نتيال",
-            "quantity1": 90.0,
-            "quantity2": 45.0,
-            "price": 5.0,
-            "previousPrice": 0.0,
-            "boxArea": 0.0
-          }
-        ]
-      },
-      {
         "number": "FA00003",
         "date": "2026-09-28",
         "type": "PAYMENT",
@@ -185,22 +60,72 @@
         "stockMovements": []
       },
       {
-        "number": "FA00017",
+        "number": "FA00020",
         "date": "2026-09-29",
         "type": "SALE",
         "description": "",
         "amount": 0.0,
-        "entries": [],
-        "stockMovements": []
-      },
-      {
-        "number": "FA00018",
-        "date": "2026-09-29",
-        "type": "SALE",
-        "description": "",
-        "amount": 0.0,
-        "entries": [],
-        "stockMovements": []
+        "entries": [
+          {
+            "material": "435بيللليل",
+            "quantity1": 45.0,
+            "unit": "قطعة",
+            "price": 5.0,
+            "total": 225.0,
+            "quantity2": 4.0
+          },
+          {
+            "material": "00 راميتا جدران سيراميك اول",
+            "quantity1": 4.74,
+            "unit": "متر",
+            "price": 20.0,
+            "total": 94.80000000000001,
+            "quantity2": 3.0
+          },
+          {
+            "material": "جوري اول",
+            "quantity1": 1.0,
+            "unit": "قطعة",
+            "price": 18.0,
+            "total": 18.0,
+            "quantity2": 1.0
+          }
+        ],
+        "stockMovements": [
+          {
+            "movementType": "NOT_IN_STOCK",
+            "inventoryKind": "SANITARY",
+            "inventoryItemId": 0,
+            "material": "435بيللليل",
+            "quantity1": 45.0,
+            "quantity2": 4.0,
+            "price": 5.0,
+            "previousPrice": 0.0,
+            "boxArea": 0.0
+          },
+          {
+            "movementType": "EXISTING_ITEM",
+            "inventoryKind": "TILE",
+            "inventoryItemId": 4,
+            "material": "00 راميتا جدران سيراميك اول",
+            "quantity1": 4.74,
+            "quantity2": 3.0,
+            "price": 20.0,
+            "previousPrice": 20.0,
+            "boxArea": 1.58
+          },
+          {
+            "movementType": "EXISTING_ITEM",
+            "inventoryKind": "SANITARY",
+            "inventoryItemId": 2,
+            "material": "جوري اول",
+            "quantity1": 1.0,
+            "quantity2": 1.0,
+            "price": 18.0,
+            "previousPrice": 18.0,
+            "boxArea": 0.0
+          }
+        ]
       }
     ]
   },
@@ -323,6 +248,206 @@
         "amount": 0.0,
         "entries": [],
         "stockMovements": []
+      }
+    ]
+  },
+  {
+    "name": "رضا سعيد",
+    "accountInvoices": [
+      {
+        "number": "FA00021",
+        "date": "2026-10-12",
+        "type": "SALE",
+        "description": "",
+        "amount": 0.0,
+        "entries": [
+          {
+            "material": "00 راميتا جدران سيراميك اول",
+            "quantity1": 23.700000000000003,
+            "unit": "متر",
+            "price": 8.0,
+            "total": 189.60000000000002,
+            "quantity2": 15.0
+          },
+          {
+            "material": "جوري اول",
+            "quantity1": 1.0,
+            "unit": "قطعة",
+            "price": 18.0,
+            "total": 18.0,
+            "quantity2": 1.0
+          },
+          {
+            "material": "لاصق ايطالي اول",
+            "quantity1": 1.0,
+            "unit": "قطعة",
+            "price": 6.5,
+            "total": 6.5,
+            "quantity2": 1.0
+          }
+        ],
+        "stockMovements": [
+          {
+            "movementType": "EXISTING_ITEM",
+            "inventoryKind": "TILE",
+            "inventoryItemId": 4,
+            "material": "00 راميتا جدران سيراميك اول",
+            "quantity1": 23.700000000000003,
+            "quantity2": 15.0,
+            "price": 8.0,
+            "previousPrice": 20.0,
+            "boxArea": 1.58
+          },
+          {
+            "movementType": "EXISTING_ITEM",
+            "inventoryKind": "SANITARY",
+            "inventoryItemId": 2,
+            "material": "جوري اول",
+            "quantity1": 1.0,
+            "quantity2": 1.0,
+            "price": 18.0,
+            "previousPrice": 18.0,
+            "boxArea": 0.0
+          },
+          {
+            "movementType": "EXISTING_ITEM",
+            "inventoryKind": "SANITARY",
+            "inventoryItemId": 8,
+            "material": "لاصق ايطالي اول",
+            "quantity1": 1.0,
+            "quantity2": 1.0,
+            "price": 6.5,
+            "previousPrice": 2.8,
+            "boxArea": 0.0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "رهف حراته",
+    "accountInvoices": [
+      {
+        "number": "FA00022",
+        "date": "2026-10-12",
+        "type": "SALE",
+        "description": "",
+        "amount": 0.0,
+        "entries": [
+          {
+            "material": "5675 بلاتينيوم جدران سيراميك ثالث",
+            "quantity1": 1.7,
+            "unit": "متر",
+            "price": 8.0,
+            "total": 13.6,
+            "quantity2": 1.0
+          },
+          {
+            "material": "روبة مطاطية اول",
+            "quantity1": 7.0,
+            "unit": "قطعة",
+            "price": 6.0,
+            "total": 42.0,
+            "quantity2": 7.0
+          },
+          {
+            "material": "00 راميتا جدران سيراميك اول",
+            "quantity1": 12.64,
+            "unit": "متر",
+            "price": 8.0,
+            "total": 101.12,
+            "quantity2": 8.0
+          }
+        ],
+        "stockMovements": [
+          {
+            "movementType": "EXISTING_ITEM",
+            "inventoryKind": "TILE",
+            "inventoryItemId": 7,
+            "material": "5675 بلاتينيوم جدران سيراميك ثالث",
+            "quantity1": 1.7,
+            "quantity2": 1.0,
+            "price": 8.0,
+            "previousPrice": 3.0,
+            "boxArea": 1.7
+          },
+          {
+            "movementType": "EXISTING_ITEM",
+            "inventoryKind": "SANITARY",
+            "inventoryItemId": 11,
+            "material": "روبة مطاطية اول",
+            "quantity1": 7.0,
+            "quantity2": 7.0,
+            "price": 6.0,
+            "previousPrice": 6.0,
+            "boxArea": 0.0
+          },
+          {
+            "movementType": "EXISTING_ITEM",
+            "inventoryKind": "TILE",
+            "inventoryItemId": 4,
+            "material": "00 راميتا جدران سيراميك اول",
+            "quantity1": 12.64,
+            "quantity2": 8.0,
+            "price": 8.0,
+            "previousPrice": 20.0,
+            "boxArea": 1.58
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "عبدالله الجباوي",
+    "accountInvoices": [
+      {
+        "number": "FA00023",
+        "date": "2026-10-12",
+        "type": "SALE",
+        "description": "",
+        "amount": 0.0,
+        "entries": [
+          {
+            "material": "00 راميتا جدران سيراميك اول",
+            "quantity1": 15.8,
+            "unit": "متر",
+            "price": 8.0,
+            "total": 126.4,
+            "quantity2": 10.0
+          },
+          {
+            "material": "لاصق ايطالي اول",
+            "quantity1": 5.0,
+            "unit": "قطعة",
+            "price": 7.0,
+            "total": 35.0,
+            "quantity2": 5.0
+          }
+        ],
+        "stockMovements": [
+          {
+            "movementType": "EXISTING_ITEM",
+            "inventoryKind": "TILE",
+            "inventoryItemId": 4,
+            "material": "00 راميتا جدران سيراميك اول",
+            "quantity1": 15.8,
+            "quantity2": 10.0,
+            "price": 8.0,
+            "previousPrice": 20.0,
+            "boxArea": 1.58
+          },
+          {
+            "movementType": "EXISTING_ITEM",
+            "inventoryKind": "SANITARY",
+            "inventoryItemId": 8,
+            "material": "لاصق ايطالي اول",
+            "quantity1": 5.0,
+            "quantity2": 5.0,
+            "price": 7.0,
+            "previousPrice": 2.8,
+            "boxArea": 0.0
+          }
+        ]
       }
     ]
   }

@@ -1,6 +1,6 @@
 [
   {
-    "quantity": 99,
+    "quantity": 86,
     "type": "LOCAL_WASHBASIN",
     "warehouse": {
       "id": 1,
@@ -9,13 +9,13 @@
       "ownerName": "",
       "ownerContact": ""
     },
-    "grade": "1",
+    "grade": "اول",
     "idNumber": 2,
     "name": "جوري",
     "price": 18.0
   },
   {
-    "quantity": 40,
+    "quantity": 34,
     "type": "OTHER_SANITARY",
     "warehouse": {
       "id": 1,
@@ -28,5 +28,20 @@
     "idNumber": 8,
     "name": "لاصق ايطالي",
     "price": 2.8
+  },
+  {
+    "quantity": 93,
+    "type": "OTHER_SANITARY",
+    "warehouse": {
+      "id": 1,
+      "name": "ابو عمر",
+      "type": "OWNED",
+      "ownerName": "",
+      "ownerContact": ""
+    },
+    "grade": "اول",
+    "idNumber": 11,
+    "name": "روبة مطاطية",
+    "price": 6.0
   }
 ]

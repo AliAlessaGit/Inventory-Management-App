@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 public enum AccountInvoiceType implements Serializable {
 
-    SALE("مبيع", true),
     PURCHASE("شراء", true),
+    SALE("مبيع", true),
     PAYMENT("دفع", false),
     RECEIPT("قبض", false);
 

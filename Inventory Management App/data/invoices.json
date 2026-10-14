@@ -194,7 +194,15 @@
       }
     ],
     "date": "2026-09-23T14:02:44.3657327",
-    "payments": [],
+    "payments": [
+      {
+        "amount": 550000.0,
+        "date": "2026-10-11T23:58:35.9652928",
+        "currency": "SYP",
+        "exchangeRate": 13800.0,
+        "dollarAmount": 39.85507246376812
+      }
+    ],
     "discount": 0.0
   }
 ]
