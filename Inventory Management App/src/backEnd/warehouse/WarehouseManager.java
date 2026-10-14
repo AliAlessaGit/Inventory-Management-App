@@ -7,12 +7,11 @@ import java.util.List;
 
 public class WarehouseManager {
     private List<Warehouse> warehouses = new ArrayList<>();
-    private String filePath = "data/warehouses.json"; // تم تغيير الامتداد إلى .json
-
+    private String filePath;
     private int nextId = 1;
 
-    public WarehouseManager(String s) {
-        // تأكد من تحميل البيانات عند إنشاء الكائن
+    public WarehouseManager(String filePath) {
+        this.filePath = filePath;
         load();
     }
 

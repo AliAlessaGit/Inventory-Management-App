@@ -160,6 +160,30 @@
         "grade": "3",
         "date": "2026-09-23T13:58:57.096982",
         "externalItem": true
+      },
+      {
+        "idNumber": 0,
+        "name": "بلاتينيوم",
+        "quantity": 1.0,
+        "unitPrice": -8.45,
+        "boxArea": 1.75,
+        "isTile": true,
+        "code": "00",
+        "grade": "3",
+        "date": "2026-10-14T23:51:00",
+        "externalItem": false
+      },
+      {
+        "idNumber": 4,
+        "name": "راميتا",
+        "quantity": 1.0,
+        "unitPrice": 20.0,
+        "boxArea": 1.58,
+        "isTile": true,
+        "code": "00",
+        "grade": "اول",
+        "date": "2026-10-15T01:03:00",
+        "externalItem": false
       }
     ],
     "date": "2026-09-23T13:55:35.8953474",

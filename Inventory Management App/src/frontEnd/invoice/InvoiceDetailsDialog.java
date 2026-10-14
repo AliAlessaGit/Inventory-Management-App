@@ -999,6 +999,10 @@ public class InvoiceDetailsDialog {
                 new JButton(
                         "الدفعات"
                 );
+        JButton exportPdfBtn =
+                new JButton(
+                        "تصدير PDF"
+                );
 
         JButton addItemBtn =
                 new JButton(
@@ -1025,7 +1029,8 @@ public class InvoiceDetailsDialog {
                         addItemBtn,
                         addReturnBtn,
                         addExternalBtn,
-                        addExternalTileBtn
+                        addExternalTileBtn,
+                        exportPdfBtn
                 }) {
 
             button.setPreferredSize(
@@ -1067,6 +1072,9 @@ public class InvoiceDetailsDialog {
                 showDetailsCheck
         );
 
+        extraButtonsPanel.add(
+                exportPdfBtn
+        );
         // =====================================================
         // الإجمالي
         // =====================================================
@@ -1683,6 +1691,9 @@ public class InvoiceDetailsDialog {
                         ).show()
         );
 
+        exportPdfBtn.addActionListener(
+                e -> exportInvoicePdf(dlg)
+        );
         // =====================================================
         // نافذة جدول البلاط
         //
@@ -2561,6 +2572,203 @@ public class InvoiceDetailsDialog {
         popup.setVisible(
                 true
         );
+    }
+    private void exportInvoicePdf(Component parent) {
+
+        // =====================================================
+        // اختيار طريقة الترتيب
+        // =====================================================
+
+
+        JComboBox<String> orderSelector =
+                new JComboBox<>(
+                        new String[]{
+                                "حسب النوع - البلاط ثم الأدوات",
+                                "حسب التاريخ - الأقدم أولاً"
+                        }
+                );
+
+        // اختيار البلاط ثم الأدوات افتراضيًا
+        orderSelector.setSelectedIndex(0);
+
+
+        JPanel sortPanel =
+                new JPanel(
+                        new BorderLayout(8, 8)
+                );
+
+        sortPanel.add(
+                new JLabel("ترتيب عناصر الفاتورة:"),
+                BorderLayout.NORTH
+        );
+
+        sortPanel.add(
+                orderSelector,
+                BorderLayout.CENTER
+        );
+
+        int sortResult =
+                JOptionPane.showConfirmDialog(
+                        parent,
+                        sortPanel,
+                        "خيارات تصدير الفاتورة",
+                        JOptionPane.OK_CANCEL_OPTION,
+                        JOptionPane.PLAIN_MESSAGE
+                );
+
+        if (sortResult != JOptionPane.OK_OPTION) {
+            return;
+        }
+
+        boolean groupByType =
+                orderSelector.getSelectedIndex() == 0;
+
+
+        java.io.File desktopDir = null;
+
+// محاولة الحصول على المسار الفعلي لسطح المكتب
+        try {
+            if (Desktop.isDesktopSupported()) {
+                Desktop desktop = Desktop.getDesktop();
+
+                if (desktop.isSupported(Desktop.Action.BROWSE)) {
+                    // لا نفتح المتصفح؛ نستخدم المسار الافتراضي أدناه.
+                }
+            }
+        } catch (Exception ignored) {
+            // نستخدم المسار الاحتياطي.
+        }
+
+// المسار المعتاد لسطح المكتب
+        desktopDir = new java.io.File(
+                System.getProperty("user.home"),
+                "Desktop"
+        );
+
+// إذا لم يوجد مجلد Desktop، استخدم مجلد المستخدم
+        if (!desktopDir.isDirectory()) {
+            desktopDir = new java.io.File(
+                    System.getProperty("user.home")
+            );
+        }
+
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("حفظ فاتورة PDF");
+
+// تحديد المجلد قبل فتح نافذة الحفظ
+        chooser.setCurrentDirectory(desktopDir);
+        chooser.setFileSelectionMode(
+                JFileChooser.FILES_ONLY
+        );
+
+        chooser.setCurrentDirectory(desktopDir);
+
+        chooser.setDialogTitle(
+                "حفظ فاتورة PDF"
+        );
+
+        // اسم الملف هو اسم العميل.
+        String customerName =
+                invoice.getCustomerName() == null
+                        ? ""
+                        : invoice.getCustomerName().trim();
+
+        // إزالة الرموز غير الصالحة في أسماء الملفات.
+        String fileName =
+                customerName.replaceAll(
+                        "[\\\\/:*?\"<>|]",
+                        "_"
+                );
+
+        if (fileName.isBlank()) {
+
+            fileName =
+                    "Invoice-"
+                            + invoice.getInvoiceNumber();
+        }
+
+        chooser.setSelectedFile(
+                new java.io.File(
+                        fileName + ".pdf"
+                )
+        );
+
+        int saveResult =
+                chooser.showSaveDialog(parent);
+
+        if (saveResult != JFileChooser.APPROVE_OPTION) {
+            return;
+        }
+
+        java.io.File outputFile =
+                chooser.getSelectedFile();
+
+        // إضافة الامتداد تلقائياً.
+        if (!outputFile.getName()
+                .toLowerCase(java.util.Locale.ROOT)
+                .endsWith(".pdf")) {
+
+            outputFile =
+                    new java.io.File(
+                            outputFile.getAbsolutePath()
+                                    + ".pdf"
+                    );
+        }
+
+        // تأكيد الكتابة فوق ملف موجود.
+        if (outputFile.exists()) {
+
+            int overwrite =
+                    JOptionPane.showConfirmDialog(
+                            parent,
+                            "الملف موجود بالفعل. هل تريد استبداله؟",
+                            "تأكيد الحفظ",
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.WARNING_MESSAGE
+                    );
+
+            if (overwrite != JOptionPane.YES_OPTION) {
+                return;
+            }
+        }
+
+        // =====================================================
+        // تنفيذ التصدير
+        // =====================================================
+
+        try {
+
+            backEnd.invoice.InvoicePdfExporter.export(
+                    invoice,
+                    tileService,
+                    sanitaryService,
+                    outputFile,
+                    groupByType
+            );
+
+            JOptionPane.showMessageDialog(
+                    parent,
+                    "تم تصدير الفاتورة بنجاح:\n"
+                            + outputFile.getAbsolutePath(),
+                    "تصدير PDF",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+
+        } catch (Exception | LinkageError ex) {
+            ex.printStackTrace();
+
+            JOptionPane.showMessageDialog(
+                    parent,
+                    "تعذر تصدير الفاتورة:\n"
+                            + ex.getClass().getSimpleName()
+                            + "\n"
+                            + (ex.getMessage() == null
+                            ? "راجع سجل التشغيل لمعرفة التفاصيل."
+                            : ex.getMessage()),
+                    "خطأ في تصدير PDF",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
     }
 
 

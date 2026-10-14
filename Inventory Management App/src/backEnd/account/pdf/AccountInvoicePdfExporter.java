@@ -4,7 +4,7 @@ import backEnd.account.Account;
 import backEnd.account.AccountEntry;
 import backEnd.account.AccountInvoice;
 import backEnd.account.AccountInvoiceType;
-
+import backEnd.invoice.InvoicePdfExporter;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Locale;
-
 public class AccountInvoicePdfExporter {
 
     private static final float PAGE_WIDTH =
@@ -88,31 +87,46 @@ public class AccountInvoicePdfExporter {
     /**
      * تحميل الخط العربي من resources.
      */
+
+
     private static PDType0Font loadArabicFont(
             PDDocument document
     ) throws IOException {
 
         InputStream stream =
-                AccountInvoicePdfExporter.class
-                        .getResourceAsStream(
-                                FONT_RESOURCE
-                        );
+                InvoicePdfExporter.class.getResourceAsStream(
+                        "/fonts/NotoNaskhArabic-Regular.ttf"
+                );
+
+        // احتياطًا عند تشغيل التطبيق من ملف JAR:
+        // resources/fonts/NotoNaskhArabic-Regular.ttf
+        if (stream == null) {
+            java.nio.file.Path fontPath =
+                    app.AppPaths.resolve(
+                            "resources/fonts/NotoNaskhArabic-Regular.ttf"
+                    );
+
+            if (java.nio.file.Files.isRegularFile(fontPath)) {
+                stream = java.nio.file.Files.newInputStream(fontPath);
+            }
+        }
 
         if (stream == null) {
             throw new IOException(
-                    "لم يتم العثور على الخط العربي:\n"
-                            + FONT_RESOURCE
-                            + "\n\n"
-                            + "تأكد من أن resources "
-                            + "مُعرّف كـ Resources Root."
+                    "لم يتم العثور على الخط العربي.\n"
+                            + "ضع الملف في:\n"
+                            + app.AppPaths.resolve(
+                            "resources/fonts/NotoNaskhArabic-Regular.ttf"
+                    )
             );
         }
 
-        return PDType0Font.load(
-                document,
-                stream
-        );
+        try (InputStream input = stream) {
+            return PDType0Font.load(document, input);
+        }
     }
+
+
 
     /**
      * رسم السند.

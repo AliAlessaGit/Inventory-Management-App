@@ -1,3 +1,4 @@
+import app.AppPaths;
 import backEnd.account.AccountsManager;
 import backEnd.currency.CurrencySettingsService;
 import backEnd.invoice.InvoiceService;
@@ -5,7 +6,7 @@ import backEnd.sanitary.SanitaryService;
 import backEnd.tile.TileService;
 import backEnd.warehouse.Warehouse;
 import backEnd.warehouse.WarehouseManager;
-
+import com.formdev.flatlaf.FlatLightLaf;
 import frontEnd.account.AccountsPanel;
 import frontEnd.currency.CurrencySettingsPanel;
 import frontEnd.inventory.AddItemPanel;
@@ -15,15 +16,10 @@ import frontEnd.sanitary.SanitaryPanel;
 import frontEnd.tile.TilePanel;
 import frontEnd.warehouse.WarehousePanel;
 
-import com.formdev.flatlaf.FlatLightLaf;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.List;
-
 public class MainFrame extends JFrame {
     private TileService tileService;
     private SanitaryService sanitaryService;
@@ -50,19 +46,53 @@ public class MainFrame extends JFrame {
 
         // 1) تحميل المستودعات (أصبح تلقائيًا داخل المُنشئ)
         // تم تمرير المسار الصحيح للملف
-        warehouseManager = new WarehouseManager("data/warehouses.json");
-        List<Warehouse> warehouses = warehouseManager.getWarehouses();
+        // المستودعات
+        warehouseManager = new WarehouseManager(
+                AppPaths.resolve(
+                        "data/warehouses.json"
+                ).toString()
+        );
 
-        // 2) الخدمات المعتمدة على المستودعات (تم تحديث المسارات إلى .json)
-        tileService = new TileService("data/tiles.json", warehouses);
-        sanitaryService = new SanitaryService("data/sanitary.json", warehouses);
-        invoiceService = new InvoiceService("data/invoices.json");
+        List<Warehouse> warehouses =
+                warehouseManager.getWarehouses();
+
+// البلاط
+        tileService = new TileService(
+                AppPaths.resolve(
+                        "data/tiles.json"
+                ).toString(),
+                warehouses
+        );
+
+// الأدوات الصحية
+        sanitaryService = new SanitaryService(
+                AppPaths.resolve(
+                        "data/sanitary.json"
+                ).toString(),
+                warehouses
+        );
+
+// الفواتير
+        invoiceService = new InvoiceService(
+                AppPaths.resolve(
+                        "data/invoices.json"
+                ).toString()
+        );
+
+// إعدادات العملة
         currencySettingsService =
-                new CurrencySettingsService("data/settings.json");
+                new CurrencySettingsService(
+                        AppPaths.resolve(
+                                "data/settings.json"
+                        ).toString()
+                );
 
-        // 3) تهيئة مدير الحسابات (التحميل أصبح تلقائيًا داخل المُنشئ)
-        accountsManager = new AccountsManager("data/accounts.json");
-
+// الحسابات
+        accountsManager = new AccountsManager(
+                AppPaths.resolve(
+                        "data/accounts.json"
+                ).toString()
+        );
         // لم نعد بحاجة لكتل try-catch للتحميل، لأن كل كلاس يهتم بنفسه.
 
         // 4) واجهات البرنامج (تبويبات)
@@ -145,16 +175,7 @@ public class MainFrame extends JFrame {
         // 5) الحفظ عند إغلاق التطبيق (اختياري الآن ولكن جيد كإجراء احترازي)
         // بما أن الحفظ يتم تلقائيا عند كل تغيير، هذا السطر ليس ضروريا جدا
         // لكنه لا يضر، ويضمن حفظ أي شيء قد يكون فاتنا.
-        addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                // يمكنك استدعاء saveQuietly لكل الخدمات إذا أردت
-                accountsManager.saveQuietly();
-                // tileService.save(); // -> تمكينها إذا أردت
-                // sanitaryService.save(); // -> تمكينها إذا أردت
-                // warehouseManager.save(); // -> تمكينها إذا أردت
-            }
-        });
+
 
         // 6) إعداد اختصارات لوحة المفاتيح العامة
         setupGlobalKeyboardActions(tabbedPane);

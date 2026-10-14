@@ -596,8 +596,24 @@ public class AccountTabPanel extends JPanel {
                         .getAccountInvoices()
                         .get(modelRow);
 
+        java.io.File desktopDir =
+                new java.io.File(
+                        System.getProperty("user.home"),
+                        "Desktop"
+                );
+
+        if (!desktopDir.isDirectory()) {
+
+            desktopDir =
+                    new java.io.File(
+                            System.getProperty("user.home")
+                    );
+        }
+
         JFileChooser chooser =
-                new JFileChooser();
+                new JFileChooser(desktopDir);
+
+        chooser.setCurrentDirectory(desktopDir);
 
         chooser.setDialogTitle(
                 "حفظ سند PDF"
